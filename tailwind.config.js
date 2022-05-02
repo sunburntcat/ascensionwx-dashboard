@@ -9,7 +9,12 @@ module.exports = {
         900: '#670A86',
       },
     },
+    screen: {
+      'xs': '475px',
+    },
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    //require('@tailwindcss/forms'),
+  ],
 }
