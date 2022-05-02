@@ -15,7 +15,7 @@ export default function Graph(props) {
     ////////// STATES ///////////////
     const [temp, setTemp] = useState([])
     const [sensor, setSensor] = useState('')
-    const [prio, setPrior] = useState()
+    const [prio, setPrior] = useState(0)
     const [errorPrior, setErrorPrior] = useState('')
     const [errorSensor, setErrorSensor] = useState('')
     ////////////////////////////////
@@ -26,8 +26,11 @@ export default function Graph(props) {
     }
     const handlePrior = (e) => {
       setPrior(e.target.value)
-      if( Number.isInteger(parseInt(e.target.value)) ){
+      var _ = e.target.value
+      
+      if (_.match(/^[0-9]+$/) != null ) {
         setErrorPrior("")
+        console.log(sensor, prio, errorPrior)
       }else if(e.target.value == ""){
         setErrorPrior("")
       }else{
@@ -36,8 +39,6 @@ export default function Graph(props) {
       
       
     }
-    console.log(sensor, prio, errorPrior)
-
     
 
     /////////////////////////////////
