@@ -1,21 +1,25 @@
 import { useState } from "react"
+import Waiting from "../components/Waiting"
 import Temperature from "../components/Chart/Temperature"
+import Humidity from "../components/Chart/Humidity"
+import Pressure from "../components/Chart/Pressure"
 import Dashboard from "../components/Dashboard"
+import QuickView from "../components/Chart/QuickView"
 import { getActions, checkCurrentGMT, compare, getData } from "../lib/api"
 
-const navigation = [
-    { name: 'Overview', href: '/' },
-    { name: 'Graph', href: '/graph' },
-    { name: 'Map', href: '/map' },
-  ]
+
+
 
 
 export default function Graph(props) {
 
+    var tmp = {temperature:[],humidity:[],pressure:[],times:[]}
     ////////// STATES ///////////////
-    const [temp, setTemp] = useState([])
+    const [series, setSeries] = useState(tmp)
     const [sensor, setSensor] = useState('')
-    const [prio, setPrior] = useState(0)
+    const [prior, setPrior] = useState(0)
+    const [plot, setPlot] = useState("Plot")
+    const [loader, setLoader] = useState(false)
     const [errorPrior, setErrorPrior] = useState('')
     const [errorSensor, setErrorSensor] = useState('')
     ////////////////////////////////
@@ -30,24 +34,27 @@ export default function Graph(props) {
       
       if (_.match(/^[0-9]+$/) != null ) {
         setErrorPrior("")
-        console.log(sensor, prio, errorPrior)
       }else if(e.target.value == ""){
         setErrorPrior("")
       }else{
         setErrorPrior('**You should enter a digit')
       }
-      
-      
+    }
+    const handleClick = (e) => {
+      setPlot("loading...")
+      setLoader(true)
+
+      setSeries(puller({sensor:sensor,before:prior}))
     }
     
-
+    console.log(puller({sensor:sensor,before:prior}))
     /////////////////////////////////
 
 
     return (
         <>
           <Dashboard className="sticky">
-            <div className=" max-w-7xl md:mx-auto flex mt-14">
+            <div className="justify-end max-w-7xl md:mx-auto flex mt-14">
                 <div>
                     <label className="block text-gray-400 text-sm font-bold mb-2" >
                     Sensor *
@@ -62,38 +69,47 @@ export default function Graph(props) {
                     <input onChange={handlePrior} className="shadow appearance-none border rounded py-2 px-3 text-gray-700 text-sm leading-tight focus:outline-none focus:shadow-outline" id="digit" type="text" placeholder="_number" />
                     <p className="block text-red-400 text-sm font-bold mb-2">{errorPrior}</p>
                 </div>
-                <div className="md:ml-5 sm:ml-5 md:py-0 sm:py-20 sm:py-20">
+                <div className="md:ml-5 sm:ml-5 md:py-0">
                     <label className="block text-violet-400 text-sm font-bold mb-2" >
                     * must be provided
                     </label>
-                    <button className="shadow appearance-none border rounded py-2 px-3 text-white bg-[#C416EC] text-sm font-bold leading-tight focus:outline-none focus:shadow-outline w-40">
-                        Plot
+                    <button onClick={handleClick} className="shadow appearance-none border rounded py-2 px-3 text-white bg-[#C416EC] text-sm font-bold leading-tight focus:outline-none focus:shadow-outline w-40" name="click">
+                        {plot}
                     </button>
                 </div>
             </div>
             
             {/* ------------------------- */}
-            <hr className="mt-12"/>
+            <hr className="mt-3"/>
 
             {/* ------------------------- */}
-            <div className="bg-blue-400">
+            <div className="mt-5">
               {
-
-                temp ??
-                (
-                  <Temperature values={temp} />
-                )
+                loader ? 
+                  <div className="mt-28">
+                    <Waiting />
+                    <p className=" mt-10 text-center text-gray-500 font-medium text-xl">
+                        Data are pulling from Telos blockchain
+                    </p>
+                  </div>
+                  :
+                  <div>
+                    <div className=" justify-center flex flex-row m-4">
+                      <Temperature values={series} />
+                      <Humidity values={series} />
+                    </div>
+                    <div className=" justify-center flex flex-row m-4">
+                      {/* <Pressure values={series} /> */}
+                      
+                      {/* <QuickView /> */}
+                    </div>
+                  {/* <Pressure values={series} /> */}
+                  </div>
               }
             </div>
 
           </Dashboard>
-            
- 
-            
-            
-
-            
-            
+      
         </>            
     )
 }
@@ -101,13 +117,21 @@ export default function Graph(props) {
 
 // the puller data
 async function puller(context) {
+  if(!context.sensor)
+    return {
+      props: {
+        data: {temperature:[],humidity:[],times:[]},
+
+      }
+    }
+
   // get the start time and the name of the device sensor
   let d = new Date();
     
   // let start = "2022-03-10T09:38:42.500Z";
   
-  const _devname = context.query.sensor
-  var _before = context.query.before
+  const _devname = context.sensor
+  var _before = context.before
 
   /////////////////////////////
   if(!_before) _before = 5
@@ -159,11 +183,11 @@ async function puller(context) {
       const from = parsed.times[size-1]
       const day_threshold = start
       is_data_collected = compare(from, day_threshold)
-      // console.log(from, day_threshold)
+
     }
   }
 
-  // console.log(is_data_collected, existing_sensor)
+
   return {
     props: {
       data: _data || JSON.stringify({}),

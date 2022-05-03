@@ -1,5 +1,9 @@
 module.exports = {
-  content: ["./pages/**/*.{js,jsx}", "./components/**/*.{js,jsx}"],
+  content: [
+    "./pages/**/*.{js,jsx}", 
+    "./components/**/*.{js,jsx}",
+    './node_modules/tw-elements/dist/js/**/*.js'
+  ],
   theme: {
     color:{
       magenta: {
@@ -9,12 +13,11 @@ module.exports = {
         900: '#670A86',
       },
     },
-    screen: {
-      'xs': '475px',
-    },
     extend: {},
   },
   plugins: [
     //require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
+    require('tw-elements/dist/plugin')
   ],
 }

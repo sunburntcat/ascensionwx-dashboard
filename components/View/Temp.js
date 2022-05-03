@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import {conversion} from '../../lib/api'
-import Modal from './Modal';
+
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-function Temperature(props) {
+function Temp(props) {
 
   const [celcius, setCelcius] = useState(true);
   const [show, setShow] = useState(false)
@@ -72,21 +72,11 @@ function Temperature(props) {
               celcius ? "to Fahrenheit" : "to Celcius"
             }
           </button>
-          <button className='ml-1 border border-gray-200 hover:border-gray-400 rounded w-28 text-sm' onClick={() => setShow(true)}>
-            {
-              "Full view"
-            }
-          </button>
-          <ApexCharts width="200%" options={options} series={series} type="area"/>
+
+          <ApexCharts width="300%" options={options} series={series} type="area"/>
         </div>
-        {
-          show ?
-          <Modal setShow={setShow} data={props.values}/>
-          :
-          <></>
-        }
       </>
     )
   }
 
-  export default Temperature
+  export default Temp
