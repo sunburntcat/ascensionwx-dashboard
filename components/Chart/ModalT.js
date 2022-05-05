@@ -3,6 +3,8 @@ import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ViewGridIcon } from '@heroicons/react/outline';
 import Temp from "../View/Temp"
+import Pres from '../View/Pres';
+import Hum from '../View/Hum';
 
 export default function Modal(props) {
   const [open, setOpen] = useState(true);
@@ -73,9 +75,26 @@ export default function Modal(props) {
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                          .
-
-                        <Temp values={props.data}/>
+                          {/* ...little header text... */}
+                        {
+                          props.name == "Temperature" ?
+                          (<Temp values={props.data}/>)
+                          :
+                          (<></>)
+                        }
+                        {
+                          props.name == "Atmospheric Pressure" ?
+                          (<Pres values={props.data}/>)
+                          :
+                          (<></>)
+                        }
+                        {
+                          props.name == "Humidity" ?
+                          (<Hum values={props.data}/>)
+                          :
+                          (<></>)
+                        }
+                        
                       </p>
                     </div>
                   </div>

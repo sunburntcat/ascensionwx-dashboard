@@ -26,7 +26,7 @@ function Pressure(props) {
     },
     yaxis: [{
       title: {
-        text: 'Pressure (HPa)',
+        text: 'Pressure (hPa)',
       },
       labels: {
         formatter: function (val) {

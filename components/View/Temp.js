@@ -7,7 +7,6 @@ const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 function Temp(props) {
 
   const [celcius, setCelcius] = useState(true);
-  const [show, setShow] = useState(false)
    
   var tmp = props.values //JSON.parse(props.values)
   

@@ -1,11 +1,10 @@
 import dynamic from 'next/dynamic';
-const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
-import Modal from './ModalT';
 import { useState } from 'react';
+const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-function Humidity(props) {
+
+function Hum(props) {
     var tmp = props.values
-    const [show, setShow] = useState(false)
     
     var options = {
       chart: {
@@ -54,28 +53,17 @@ function Humidity(props) {
     var series = [{
       name: 'Humidity',
       type: 'area',
-      data: tmp.humidity
+      data: tmp.pressure
     }]
     return (
       <>
-          <div className=''>
-          <button className='ml-10 border border-gray-200 hover:border-gray-400 rounded w-28 text-sm' onClick={() => { setShow(true) }}>
-              {
-                "Full view"
-              }
-            </button>
-            <ApexCharts width="200%" options={options} series={series} type="area"/>
+        <div className=''>
+            <ApexCharts width="300%" options={options} series={series} type="area"/>
         </div>
-        {
-          show ?
-          <Modal setShow={setShow} data={props.values} name={"Humidity"}/>
-          :
-          <></>
-        }
       </>
       
     )
   
   }
 
-  export default Humidity
+  export default Hum
