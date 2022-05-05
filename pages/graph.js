@@ -129,35 +129,20 @@ export default function Graph(props) {
 
 // the puller data
 async function puller(context) {
-  if(!context.sensor)
-    return {
-      props: {
-        data: {temperature:[],humidity:[],times:[]},
-
-      }
-    }
-
-  console.log(context)
 
   // get the start time and the name of the device sensor
   let d = new Date();
-    
-  // let start = "2022-03-10T09:38:42.500Z";
   
+  
+  ///////////////////////////// pre config ////////////////////////////
   const _devname = context.sensor
   var _before = context.before
-
-  /////////////////////////////
   if(!_before) _before = 5
-  /////////////////////////////
 
   d.setDate(d.getDate() - _before)
   
-  // set the day to today - 'before' days
+  // set the day to [today - 'before' days] in iso format
   let start = d.toISOString()
- 
-  // get the response data
-  const res = await getActions( start )
 
   // check GMT index time to different zone
   var val = new Date().toString().match(/([-\+][0-9]+)\s/)[1] 
@@ -167,12 +152,16 @@ async function puller(context) {
     d.setHours( d.getHours() + 1 )
     start = d.toISOString()
   }
-  if (id == 1){
-    // keep time
-  }
+  /////////////////////////////
+
+
+ 
+  // get the response data
+  const res = await getActions( start )
 
   // parse into json format
   const json = await res.json()
+  console.log(json)
   const _actions = json.actions
 
   const parsed = getData(_actions, _devname)
