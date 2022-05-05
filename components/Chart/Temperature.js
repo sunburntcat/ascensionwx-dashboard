@@ -65,9 +65,9 @@ function Temperature(props) {
     
   
     return (
-      <div className='rounded overflow-hidden shadow-lg bg-white'>
-        <div>
-          <button className='ml-10 mt-5 border border-gray-200 hover:border-gray-400 bg-gray-200 rounded w-28 text-sm text-gray-700' onClick={() => { setCelcius(!celcius)}}>
+      <div className='rounded overflow-hidden shadow-lg border border-gray-200 bg-white'>
+        <div className='m-2'>
+          <button className='ml-10 mt-10 border border-gray-200 hover:border-gray-400 bg-gray-200 rounded w-28 text-sm text-gray-700' onClick={() => { setCelcius(!celcius)}}>
             {
               celcius ? "to Fahrenheit" : "to Celcius"
             }
@@ -77,7 +77,7 @@ function Temperature(props) {
               "Full view"
             }
           </button>
-          <ApexCharts width="200%" options={options} series={series} type="area"/>
+          <ApexCharts width="100%" options={options} series={series} type="area"/>
         </div>
         {
           show ?

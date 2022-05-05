@@ -4,8 +4,8 @@ import Temperature from "../components/Chart/Temperature"
 import Humidity from "../components/Chart/Humidity"
 import Pressure from "../components/Chart/Pressure"
 import Dashboard from "../components/Dashboard"
+import SensorCard from "../components/View/SensorCard"
 import { getActions, checkCurrentGMT, compare, getData } from "../lib/api"
-
 
 
 
@@ -82,7 +82,7 @@ export default function Graph(props) {
             <hr className="mt-3"/>
 
             {/* ------------------------- */}
-            <div className="mt-5 bg-[#EEF1FA45]">
+            <div className="mt-5">
               {
                 loader ? 
                   <div className="mt-28">
@@ -92,22 +92,20 @@ export default function Graph(props) {
                     </p>
                   </div>
                   :
-                  <div>
-                    <div className=" justify-center flex flex-row m-4 ">
+                  <div className="">
+                    <div className="m-4 grid gap-4 grid-cols-2">
+                      <SensorCard values={series} />
                       <Temperature values={series} />
-                      <Humidity values={series} />
-                    </div>
-                    <div className=" justify-center flex flex-row m-4">
-                      {/* <Pressure values={series} /> */}
                       
-
                     </div>
-                    <div className="ml-9">
+                    <div className="m-4 grid gap-4 grid-cols-2">
+                        <Humidity values={series} />
                         <Pressure values={series} />
                     </div>
                   </div>
               }
             </div>
+            <br/>
 
           </Dashboard>
       

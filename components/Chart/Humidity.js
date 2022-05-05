@@ -57,14 +57,14 @@ function Humidity(props) {
       data: tmp.humidity
     }]
     return (
-      <>
-          <div className=''>
-          <button className='ml-10 border border-gray-200 hover:border-gray-400 rounded w-28 text-sm' onClick={() => { setShow(true) }}>
+      <div className='rounded overflow-hidden shadow-lg border border-gray-200 bg-white'>
+          <div className='m-2'>
+          <button className='ml-10 mt-10 border border-gray-200 hover:border-gray-400 rounded w-28 text-sm' onClick={() => { setShow(true) }}>
               {
                 "Full view"
               }
             </button>
-            <ApexCharts width="200%" options={options} series={series} type="area"/>
+            <ApexCharts width="100%" options={options} series={series} type="area"/>
         </div>
         {
           show ?
@@ -72,7 +72,7 @@ function Humidity(props) {
           :
           <></>
         }
-      </>
+      </div>
       
     )
   
