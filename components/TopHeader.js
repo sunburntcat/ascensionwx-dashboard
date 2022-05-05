@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/solid";
 import Image from "next/image";
+import Link from "next/link";
 import KandaLogo from "../public/kanda-half.png"
 
 
@@ -13,15 +14,14 @@ export default function TopHeader(props) {
               <nav className="relative flex items-center justify-between sm:h-10 lg:justify-start" aria-label="Global">
                 <div className="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
                   <div className="flex items-center justify-between w-full md:w-auto">
-                    <a href="/">
                       <span className="sr-only">Workflow</span>
                       <Image
                         className="h-8 w-auto sm:h-10"
                         src={KandaLogo}
                         height={210*0.2}
                         width={208*0.2}
+                        alt="logo"
                       />
-                    </a>
                     <div className="-mr-2 flex items-center md:hidden">
                       <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                         <span className="sr-only">Open main menu</span>
@@ -32,9 +32,9 @@ export default function TopHeader(props) {
                 </div>
                 <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
                   {props.links.map((item) => (
-                    <a key={item.name} href={item.href} className="font-medium text-xl text-gray-500 hover:text-gray-900">
+                    <Link key={item.name} href={item.href} className="font-medium text-xl text-gray-500 hover:text-gray-900">
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </nav>

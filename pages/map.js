@@ -16,13 +16,7 @@ export default function Map() {
                     </p>
                     <div className="mt-10 sm:mt-16 sm:flex sm:justify-center lg:justify-start">
                         <div className="rounded-md shadow">
-                        <a
-                            href="https://kandaweather.org"
-                            target="_blank"
-                            className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#C416EC] hover:bg-[#8C01AA] md:py-4 md:text-lg md:px-10"
-                        >
-                            Map
-                        </a>
+
                         </div>
                     </div>
                 </div>
