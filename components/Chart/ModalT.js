@@ -68,12 +68,13 @@ export default function Modal(props) {
                     <ViewGridIcon className="h-6 w-6 text-yellow-300" aria-hidden="true" />
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
-                      Temperature
+                    <Dialog.Title as="h3" className="mt-2 text-lg leading-6 font-medium text-gray-900">
+                      {props.name}
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
                           .
+
                         <Temp values={props.data}/>
                       </p>
                     </div>
@@ -89,7 +90,7 @@ export default function Modal(props) {
                     hover:bg-gray-50 focus:outline-none focus:ring-2
                      focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0
                       sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={() => setOpen(false)}
+                  onClick={handleClose}
                   ref={cancelButtonRef}
                 >
                   Close

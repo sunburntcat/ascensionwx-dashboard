@@ -4,7 +4,6 @@ import Temperature from "../components/Chart/Temperature"
 import Humidity from "../components/Chart/Humidity"
 import Pressure from "../components/Chart/Pressure"
 import Dashboard from "../components/Dashboard"
-import QuickView from "../components/Chart/QuickView"
 import { getActions, checkCurrentGMT, compare, getData } from "../lib/api"
 
 
@@ -101,9 +100,9 @@ export default function Graph(props) {
                     <div className=" justify-center flex flex-row m-4">
                       {/* <Pressure values={series} /> */}
                       
-                      {/* <QuickView /> */}
+
                     </div>
-                  {/* <Pressure values={series} /> */}
+                  <Pressure values={series} />
                   </div>
               }
             </div>

@@ -1,9 +1,12 @@
 import dynamic from 'next/dynamic';
+import { useState } from 'react';
+import Modal from './ModalT';
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 
 function Pressure(props) {
     var tmp = props.values
+    const [show, setShow] = useState(false)
     
     var options = {
       chart: {
@@ -55,14 +58,23 @@ function Pressure(props) {
       data: tmp.pressure
     }]
     return (
-      <div className=''>
-         <button className='ml-10 border border-gray-200 hover:border-gray-400 rounded w-28 text-sm' onClick={() => {  }}>
-            {
-              "Full view"
-            }
-          </button>
-          <ApexCharts width="200%" options={options} series={series} type="area"/>
-      </div>
+      <>
+        <div className=''>
+          <button className='ml-10 border border-gray-200 hover:border-gray-400 rounded w-28 text-sm' onClick={() => setShow(true)}>
+              {
+                "Full view"
+              }
+            </button>
+            <ApexCharts width="50%" options={options} series={series} type="area"/>
+        </div>
+        {
+          show ?
+          <Modal setShow={setShow} data={props.values} name={"Atmospheric Pressure"}/>
+          :
+          <></>
+        }
+      </>
+      
     )
   
   }

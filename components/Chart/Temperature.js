@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import {conversion} from '../../lib/api'
-import Modal from './Modal';
+import Modal from './ModalT';
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 function Temperature(props) {
@@ -81,7 +81,7 @@ function Temperature(props) {
         </div>
         {
           show ?
-          <Modal setShow={setShow} data={props.values}/>
+          <Modal setShow={setShow} data={props.values} name={"Temperature"}/>
           :
           <></>
         }
