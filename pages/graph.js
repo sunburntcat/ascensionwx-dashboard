@@ -13,6 +13,13 @@ import { getActions, checkCurrentGMT, compare, getData } from "../lib/api"
 export default function Graph(props) {
 
     var tmp = {temperature:[],humidity:[],pressure:[],times:[]}
+    var sensor_info = {
+      block: "block data",
+      trx: "trx data",
+      devname: "devname data",
+      producer: "producer data",
+      receiver: "receiver data"
+    }
     ////////// STATES ///////////////
     const [series, setSeries] = useState(tmp)
     const [sensor, setSensor] = useState('')
@@ -94,7 +101,7 @@ export default function Graph(props) {
                   :
                   <div className="">
                     <div className="m-4 grid gap-4 grid-cols-2">
-                      <SensorCard values={series} />
+                      <SensorCard sensor={sensor_info} />
                       <Temperature values={series} />
                       
                     </div>
