@@ -33,6 +33,7 @@ export default function Graph(props) {
     ////////// Handlers /////////////
     const handleSensor = (e) => {
       setSensor(e.target.value)
+      setErrorSensor('')
     }
     const handlePrior = (e) => {
       setPrior(e.target.value)
@@ -47,13 +48,18 @@ export default function Graph(props) {
       }
     }
     const handleClick = (e) => {
-      setPlot("loading...")
-      setLoader(true)
 
-      setSeries(puller({sensor:sensor,before:prior}))
+      if(!sensor) {
+        setErrorSensor("You should provide a devname")
+      }else{
+        setPlot("loading...")
+        setLoader(true)
+        const request = puller({sensor:sensor,before:prior})
+        setSeries(request)
+      }
+      
     }
     
-    console.log(puller({sensor:sensor,before:prior}))
     /////////////////////////////////
 
 
@@ -130,6 +136,8 @@ async function puller(context) {
 
       }
     }
+
+  console.log(context)
 
   // get the start time and the name of the device sensor
   let d = new Date();
