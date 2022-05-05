@@ -11,6 +11,15 @@ function Temperature(props) {
    
   var tmp = props.values //JSON.parse(props.values)
   
+  // Converted value to Fahrenheit unit
+  var series_fah = conversion(tmp.temperature)
+  
+  var series = [{
+    name: 'Temperature',
+    type: 'area',
+    data: celcius ? tmp.temperature : series_fah
+  }]
+
   var options = {
       chart: {
       // height: 350,
@@ -19,14 +28,17 @@ function Temperature(props) {
         type: "x",
         enabled: true,
       },
-    },    
+    },
+    title:{
+      text: ""
+    },
     dataLabels: {
       enabled: false,
       enabledOnSeries: [1]
     },
     labels: tmp.times,
     xaxis: {
-      type: 'Datetime'
+      type: 'datetime'
     },
     yaxis: [{
       title: {
@@ -34,7 +46,7 @@ function Temperature(props) {
       },
       labels: {
         formatter: function (val) {
-          if (series.data === undefined || series.data.length === 0)
+          if (series[0].data === undefined || series[0].data.length === 0)
           return 
         else
           return (val).toFixed(2)
@@ -54,14 +66,7 @@ function Temperature(props) {
     }
     }
 
-    // Converted value to Fahrenheit unit
-    var series_fah = conversion(tmp.temperature)
-  
-    var series = [{
-      name: 'Temperature',
-      type: 'area',
-      data: celcius ? tmp.temperature : series_fah
-    }]
+    
     
   
     return (
