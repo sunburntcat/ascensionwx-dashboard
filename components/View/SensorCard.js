@@ -11,7 +11,7 @@ export default function SensorCard(props) {
                 <h5 className="mt-5 mb-4 text-xl font-medium text-[#8C01AA]"> Sensor information</h5>
                 <div className="flex items-baseline text-gray-900">
                     <span className="ml-5 text-xl font-normal text-gray-500 ">_devname:</span>
-                    <span className="ml-2 text-3xl font-semibold">xxxxxxxxx</span>
+                    <span className="ml-2 text-3xl font-semibold">--</span>
                 </div>
                 <ul role="list" className="my-7 space-y-5 ml-10">
                     <li className="flex space-x-3">

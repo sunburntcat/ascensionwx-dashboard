@@ -14,11 +14,11 @@ export default function Graph(props) {
 
     var tmp = {temperature:[],humidity:[],pressure:[],times:[]}
     var sensor_info = {
-      block: "block data",
-      trx: "trx data",
-      devname: "devname data",
-      producer: "producer data",
-      receiver: "receiver data"
+      block: "",
+      trx: "",
+      devname: "",
+      producer: "",
+      receiver: ""
     }
     ////////// STATES ///////////////
     const [series, setSeries] = useState(tmp)
@@ -54,9 +54,14 @@ export default function Graph(props) {
       }else{
         setPlot("loading...")
         setLoader(true)
-        const result = async ({sensor:sensor,before:prior}) => await puller({sensor:sensor,before:prior})
-        console.log(result)
-        setSeries(result)
+        const template = {sensor:sensor,before:prior}
+        const result = puller(template).then(data => {
+          setSeries(data.props.data)
+          setPlot("Plot")
+          setLoader(false)
+          
+        }) 
+        
       }
       
     }
