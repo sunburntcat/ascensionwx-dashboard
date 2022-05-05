@@ -82,7 +82,7 @@ export default function Graph(props) {
             <hr className="mt-3"/>
 
             {/* ------------------------- */}
-            <div className="mt-5">
+            <div className="mt-5 bg-[#EEF1FA45]">
               {
                 loader ? 
                   <div className="mt-28">
@@ -93,7 +93,7 @@ export default function Graph(props) {
                   </div>
                   :
                   <div>
-                    <div className=" justify-center flex flex-row m-4">
+                    <div className=" justify-center flex flex-row m-4 ">
                       <Temperature values={series} />
                       <Humidity values={series} />
                     </div>
@@ -102,7 +102,9 @@ export default function Graph(props) {
                       
 
                     </div>
-                  <Pressure values={series} />
+                    <div className="ml-9">
+                        <Pressure values={series} />
+                    </div>
                   </div>
               }
             </div>

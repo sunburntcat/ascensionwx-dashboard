@@ -65,9 +65,9 @@ function Temperature(props) {
     
   
     return (
-      <>
+      <div className='rounded overflow-hidden shadow-lg bg-white'>
         <div>
-          <button className='ml-10 border border-gray-200 hover:border-gray-400 bg-gray-200 rounded w-28 text-sm text-gray-700' onClick={() => { setCelcius(!celcius)}}>
+          <button className='ml-10 mt-5 border border-gray-200 hover:border-gray-400 bg-gray-200 rounded w-28 text-sm text-gray-700' onClick={() => { setCelcius(!celcius)}}>
             {
               celcius ? "to Fahrenheit" : "to Celcius"
             }
@@ -85,7 +85,7 @@ function Temperature(props) {
           :
           <></>
         }
-      </>
+      </div>
     )
   }
 
