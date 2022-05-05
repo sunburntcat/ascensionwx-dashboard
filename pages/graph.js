@@ -54,8 +54,9 @@ export default function Graph(props) {
       }else{
         setPlot("loading...")
         setLoader(true)
-        const request = puller({sensor:sensor,before:prior})
-        setSeries(request)
+        const result = async ({sensor:sensor,before:prior}) => await puller({sensor:sensor,before:prior})
+        console.log(result)
+        setSeries(result)
       }
       
     }
@@ -161,7 +162,6 @@ async function puller(context) {
 
   // parse into json format
   const json = await res.json()
-  console.log(json)
   const _actions = json.actions
 
   const parsed = getData(_actions, _devname)
@@ -170,7 +170,7 @@ async function puller(context) {
 
   let is_data_collected = false
 
-  // check result of _data
+  ////////////////////// check result of _data ////////////////////////////////////////
   let existing_sensor = false
   if(_data == JSON.stringify({temperature:[],humidity:[],times:[]})){
     existing_sensor = false
@@ -189,11 +189,12 @@ async function puller(context) {
 
     }
   }
+  //////////////////////////////////////////////
 
 
   return {
     props: {
-      data: _data || JSON.stringify({}),
+      data: parsed || JSON.stringify({}), //_data
       existing_sensor,
       is_data_collected,
 
