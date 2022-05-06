@@ -7,6 +7,12 @@ const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 function Pressure(props) {
     var tmp = props.values
     const [show, setShow] = useState(false)
+
+    var series = [{
+      name: 'Pressure',
+      type: 'area',
+      data: tmp.pressure
+    }]
     
     var options = {
       chart: {
@@ -30,7 +36,7 @@ function Pressure(props) {
       },
       labels: {
         formatter: function (val) {
-            if (series.data === undefined || series.data.length === 0)
+            if (series[0].data === undefined || series[0].data.length === 0)
             return 
           else
             return (val).toFixed(2)
@@ -52,11 +58,7 @@ function Pressure(props) {
         }
     }
 }
-    var series = [{
-      name: 'Pressure',
-      type: 'area',
-      data: tmp.pressure
-    }]
+    
     return (
       <div className='rounded overflow-hidden shadow-lg border border-gray-200 bg-white'>
         <div className='m-2'>

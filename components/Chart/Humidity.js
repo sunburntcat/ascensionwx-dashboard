@@ -6,6 +6,12 @@ import { useState } from 'react';
 function Humidity(props) {
     var tmp = props.values
     const [show, setShow] = useState(false)
+
+    var series = [{
+      name: 'Humidity',
+      type: 'area',
+      data: tmp.humidity
+    }]
     
     var options = {
       chart: {
@@ -29,7 +35,7 @@ function Humidity(props) {
       },
       labels: {
         formatter: function (val) {
-            if (series.data === undefined || series.data.length === 0)
+            if (series[0].data === undefined || series[0].data.length === 0)
             return 
           else
             return (val).toFixed(2)
@@ -51,11 +57,7 @@ function Humidity(props) {
         }
     }
 }
-    var series = [{
-      name: 'Humidity',
-      type: 'area',
-      data: tmp.humidity
-    }]
+    
     return (
       <div className='rounded overflow-hidden shadow-lg border border-gray-200 bg-white'>
           <div className='m-2'>

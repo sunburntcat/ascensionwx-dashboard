@@ -7,13 +7,16 @@ import Pres from '../View/Pres';
 import Hum from '../View/Hum';
 
 export default function Modal(props) {
+
+
   const [open, setOpen] = useState(true);
+
 
   const cancelButtonRef = useRef(null);
 
   const handleClose = () => {
-    setOpen
     props.setShow(false)
+    setOpen(false)
   }
 
   return (
@@ -76,27 +79,29 @@ export default function Modal(props) {
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
                           {/* ...little header text... */}
-                        {
-                          props.name == "Temperature" ?
-                          (<Temp values={props.data}/>)
-                          :
-                          (<></>)
-                        }
-                        {
-                          props.name == "Atmospheric Pressure" ?
-                          (<Pres values={props.data}/>)
-                          :
-                          (<></>)
-                        }
-                        {
-                          props.name == "Humidity" ?
-                          (<Hum values={props.data}/>)
-                          :
-                          (<></>)
-                        }
-                        
                       </p>
-                    </div>
+                      {
+                        props.name == "Temperature" ?
+                        // <></>
+                        (<Temp values={props.data}/>)
+                        :
+                        (<></>)
+                      }
+                      {
+                        props.name == "Atmospheric Pressure" ?
+                        (<Pres values={props.data}/>)
+                        :
+                        (<></>)
+                      }
+                      {
+                        props.name == "Humidity" ?
+                        (<Hum values={props.data}/>)
+                        :
+                        (<></>)
+                      }
+                        
+                      
+                    </div> 
                   </div>
                 </div>
               </div>

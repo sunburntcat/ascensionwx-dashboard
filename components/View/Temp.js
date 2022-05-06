@@ -5,7 +5,7 @@ import {conversion} from '../../lib/api'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 function Temp(props) {
-
+  
   const [celcius, setCelcius] = useState(true);
    
   var tmp = props.values //JSON.parse(props.values)
@@ -59,8 +59,8 @@ function Temp(props) {
       stops: [0, 90, 100]
     }
     }
-    }
-  
+  }
+  console.log(props)
     
     
   
@@ -72,7 +72,6 @@ function Temp(props) {
               celcius ? "to Fahrenheit" : "to Celcius"
             }
           </button>
-
           <ApexCharts width="300%" options={options} series={series} type="area"/>
         </div>
       </>

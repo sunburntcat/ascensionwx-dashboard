@@ -5,6 +5,12 @@ const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 function Hum(props) {
     var tmp = props.values
+
+    var series = [{
+      name: 'Humidity',
+      type: 'area',
+      data: tmp.pressure
+    }]
     
     var options = {
       chart: {
@@ -28,7 +34,7 @@ function Hum(props) {
       },
       labels: {
         formatter: function (val) {
-            if (series.data === undefined || series.data.length === 0)
+            if (series[0].data === undefined || series[0].data.length === 0)
             return 
           else
             return (val).toFixed(2)
@@ -50,11 +56,7 @@ function Hum(props) {
         }
     }
 }
-    var series = [{
-      name: 'Humidity',
-      type: 'area',
-      data: tmp.pressure
-    }]
+    
     return (
       <>
         <div className=''>
