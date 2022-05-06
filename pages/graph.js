@@ -23,6 +23,7 @@ export default function Graph(props) {
     ////////// STATES ///////////////
     const [series, setSeries] = useState(tmp)
     const [sensor, setSensor] = useState('')
+    const [sensorInfo, setSensorInfo] = useState(sensor_info)
     const [prior, setPrior] = useState(0)
     const [plot, setPlot] = useState("Plot")
     const [loader, setLoader] = useState(false)
@@ -57,6 +58,8 @@ export default function Graph(props) {
         const template = {sensor:sensor,before:prior}
         const result = puller(template).then(data => {
           setSeries(data.props.data)
+          setSensorInfo(data.props.data.sensor)
+          console.log(data.props.data.sensor)
           setPlot("Plot")
           setLoader(false)
           
@@ -113,7 +116,7 @@ export default function Graph(props) {
                   :
                   <div className="">
                     <div className="m-4 grid gap-4 grid-cols-2">
-                      <SensorCard sensor={sensor_info} />
+                      <SensorCard sensor={sensorInfo} />
                       <Temperature values={series} />
                       
                     </div>
