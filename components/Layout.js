@@ -1,5 +1,5 @@
 import KandaMap from "../public/kanda-map4.png"
-import MapOverview from "./MapOverview";
+import Overview from "./Overview";
 import TopHeader from "./TopHeader";
 
 const navigation = [
@@ -33,7 +33,7 @@ export function Layout({children})  {
           
         </div>
       </div>
-      <MapOverview source={KandaMap} />
+      <Overview source={KandaMap} />
     
     </div>
   )

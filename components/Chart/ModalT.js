@@ -2,9 +2,14 @@
 import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ViewGridIcon } from '@heroicons/react/outline';
-import Temp from "../View/Temp"
+// import Temp from "../View/Temp"
 import Pres from '../View/Pres';
 import Hum from '../View/Hum';
+import dynamic from 'next/dynamic';
+const Temp = dynamic(() => import("../View/Temp"), {
+  loading: () => "Loading...",
+  ssr: false
+});
 
 export default function Modal(props) {
 

@@ -1,6 +1,13 @@
 import Dashboard from "../components/Dashboard"
+// import Overview from "../components/Overview"
+import dynamic from 'next/dynamic';
+const MapOverview = dynamic(() => import("../components/MapOverview"), {
+    loading: () => "Loading...",
+    ssr: false
+  });
 
 export default function Map() {
+    
     return (
         <div className="justify-center">
             <Dashboard>
@@ -11,15 +18,10 @@ export default function Map() {
 
                 
             </Dashboard>
-            <main className="w-11/12 mt-10 ml-auto mr-auto rounded  shadow-lg border border-gray-200 bg-white">
-                <div className="sm:text-center lg:text-center">
-
-
-                    <div className="sm:mt-16 sm:flex sm:justify-center lg:justify-start">
-                            
-                    </div>
-                </div>
+            <main className="w-8/12 h-[40rem] mt-10 ml-auto mr-auto rounded  shadow-lg border border-gray-200 bg-white">
+                <MapOverview className={" bg-red-300"}/>
             </main>
+            <br/>
         </div>
         
     )

@@ -9,7 +9,7 @@ const navigation = [
 
 export default function Dashboard({children}) {
     return (
-        <div className="relative sticky bg-white overflow-hidden">
+        <div className="relative bg-white overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div className=" z-10 bg-white "> {/* sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 */}
                     <svg

@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import {conversion} from '../../lib/api'
-import Modal from './ModalT';
+// import Modal from './ModalT';
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
+const Modal = dynamic(() => import("./ModalT"), {
+    loading: () => "Loading...",
+    ssr: false
+  });
 
 function Temperature(props) {
 
