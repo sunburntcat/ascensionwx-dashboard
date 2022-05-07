@@ -59,7 +59,6 @@ export default function Graph(props) {
         const result = puller(template).then(data => {
           setSeries(data.props.data)
           setSensorInfo(data.props.data.sensor)
-          console.log(data.props.data.sensor)
           setPlot("Plot")
           setLoader(false)
           
@@ -145,9 +144,10 @@ async function puller(context) {
   
   ///////////////////////////// pre config ////////////////////////////
   const _devname = context.sensor
-  var _before = context.before+1
-  if(!_before) _before = 5+1
-
+  var _before = context.before
+  if(!_before) _before = 5
+  _before = _before+1
+  
   d.setDate(d.getDate() - _before)
   
   // set the day to [today - 'before' days] in iso format
@@ -158,11 +158,11 @@ async function puller(context) {
   var id = checkCurrentGMT(val)
   // if (id == 0 ){
   //   // add 1hour to the server time
-  //   d.setHours( d.getHours() + 1 )
-  //   start = d.toISOString()
+    d.setHours( d.getHours() + 1 )
+    start = d.toISOString()
   // }
-  d.setHours( d.getHours() + 1 )
-  start = d.toISOString()
+  // d.setHours( d.getHours() + 1 )
+  // start = d.toISOString()
   /////////////////////////////
 
 
