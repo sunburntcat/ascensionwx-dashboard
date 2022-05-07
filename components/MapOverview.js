@@ -1,32 +1,21 @@
-import { useState, useRef, useEffect } from "react"
-import mapboxgl from "mapbox-gl"
-import Head from "next/head"
 
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
 
-mapboxgl.accessToken = "pk.eyJ1IjoiYm03IiwiYSI6ImNsMnZhMzZlZTA5djkzanBoaGRrMWxqcXIifQ.QBbiF7NE0j389I6rIV0Dmg"
-
-export default function MapOverview(props) {
-
-    const mapContainer = useRef(null);
-    const map = useRef(null);
-    const [lng, setLng] = useState(-70.9);
-    const [lat, setLat] = useState(42.35);
-    const [zoom, setZoom] = useState(8);
-
-    console.log(mapboxgl.accessToken)
-    
-
-    useEffect(() => {
-        if (map.current) return; // initialize map only once
-        map.current = new mapboxgl.Map({
-          container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/streets-v11',
-          center: [lng, lat],
-          zoom: zoom
-        });
-      });
-    
-    return (
-      <div ref={mapContainer} className="" />
-    )
+const MapOverview = () => {
+  return (
+    <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} style={{height: 400, width: "100%"}}>
+      <TileLayer
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={[51.505, -0.09]}>
+        <Popup>
+          A pretty CSS3 popup. <br /> Easily customizable.
+        </Popup>
+      </Marker>
+    </MapContainer>
+  )
 }
+
+export default MapOverview
