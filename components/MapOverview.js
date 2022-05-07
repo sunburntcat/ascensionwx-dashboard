@@ -1,15 +1,24 @@
 
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+import { useState } from 'react'
+import { postMapData } from '../lib/api'
+import mk from "../public/mk-green.png"
 
 const MapOverview = () => {
+  const [rows, setRows] = useState([])
+  const data = postMapData().then(data => {
+    const rows = data.rows
+    setRows(data.rows)
+  })
+  console.log(rows)
   return (
-    <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} style={{height: 400, width: "100%"}}>
+    <MapContainer center={[6.524400, 3.379199]} zoom={3} scrollWheelZoom={true} style={{height: "100%", width: "100%"}}>
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[51.505, -0.09]}>
+      <Marker position={[6.524400, 3.379199]} icon={mk} >
         <Popup>
           A pretty CSS3 popup. <br /> Easily customizable.
         </Popup>
