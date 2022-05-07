@@ -145,8 +145,8 @@ async function puller(context) {
   
   ///////////////////////////// pre config ////////////////////////////
   const _devname = context.sensor
-  var _before = context.before
-  if(!_before) _before = 5
+  var _before = context.before+1
+  if(!_before) _before = 5+1
 
   d.setDate(d.getDate() - _before)
   
@@ -156,11 +156,13 @@ async function puller(context) {
   // check GMT index time to different zone
   var val = new Date().toString().match(/([-\+][0-9]+)\s/)[1] 
   var id = checkCurrentGMT(val)
-  if (id == 0 ){
-    // add 1hour to the server time
-    d.setHours( d.getHours() + 1 )
-    start = d.toISOString()
-  }
+  // if (id == 0 ){
+  //   // add 1hour to the server time
+  //   d.setHours( d.getHours() + 1 )
+  //   start = d.toISOString()
+  // }
+  d.setHours( d.getHours() + 1 )
+  start = d.toISOString()
   /////////////////////////////
 
 
