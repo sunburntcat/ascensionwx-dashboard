@@ -18,11 +18,18 @@ const MapOverview = () => {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[6.524400, 3.379199]} >
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
+      {
+        rows.map((row) => (
+          <>
+            <Marker position={[row.latitude_deg , row.longitude_deg]} style={""}>
+              <Popup>
+                A pretty CSS3 popup. <br /> Easily customizable.
+              </Popup>
+            </Marker>
+          </>
+        ))
+      }
+      
     </MapContainer>
   )
 }
