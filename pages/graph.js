@@ -16,7 +16,7 @@ export default function Graph(props) {
     var sensor_info = {
       block: "",
       trx: "",
-      devname: "",
+      devname: props.data.sensor.devname,
       producer: "",
       receiver: ""
     }
@@ -134,6 +134,26 @@ export default function Graph(props) {
     )
 }
 
+
+export async function getServerSideProps(context) {
+  const ctx = {
+    sensor: "nxik2maqfxop",
+  }
+
+  const template = {sensor:ctx.sensor,before:5}
+  var predata
+  var presensor
+  const res = await puller(template)
+  
+  console.log(res.props)
+
+  return {
+    props: {
+      pre: JSON.stringify(res.props),
+
+    }
+  }
+}
 
 // the puller data
 async function puller(context) {
