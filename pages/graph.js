@@ -22,7 +22,7 @@ export default function Graph(props) {
     }
     ////////// STATES ///////////////
     const [series, setSeries] = useState(tmp)
-    const [sensor, setSensor] = useState('')
+    const [sensor, setSensor] = useState('nxik2maqfxop')
     const [sensorInfo, setSensorInfo] = useState(sensor_info)
     const [prior, setPrior] = useState(0)
     const [plot, setPlot] = useState("Plot")
