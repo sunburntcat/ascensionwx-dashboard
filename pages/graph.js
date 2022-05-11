@@ -5,21 +5,25 @@ import Humidity from "../components/Chart/Humidity"
 import Pressure from "../components/Chart/Pressure"
 import Dashboard from "../components/Dashboard"
 import SensorCard from "../components/View/SensorCard"
-import { getActions, checkCurrentGMT, compare, getData } from "../lib/api"
+import { getActions, checkCurrentGMT, compare, getData, postMapData } from "../lib/api"
 
 
 
 
 export default function Graph(props) {
-
-    var tmp = {temperature:[],humidity:[],pressure:[],times:[]}
+    const json_sensor = JSON.parse(props.sensor)
+    const json_data = JSON.parse(props.data)
+    console.log(json_data)
+    var tmp = json_data     //{temperature:[],humidity:[],pressure:[],times:[]}
     var sensor_info = {
-      block: "",
-      trx: "",
-      devname: props.data.sensor.devname,
-      producer: "",
-      receiver: ""
+      time_created: json_sensor.responseSensor.time_created,
+      status: json_sensor.responseWeather.unix_time_s,
+      devname: "nxik2maqfxop",
+      la: json_sensor.responseWeather.la,
+      lo: json_sensor.responseWeather.lo,
+      miner: json_sensor.responseSensor.miner
     }
+
     ////////// STATES ///////////////
     const [series, setSeries] = useState(tmp)
     const [sensor, setSensor] = useState('nxik2maqfxop')
@@ -142,16 +146,51 @@ export async function getServerSideProps(context) {
 
   const template = {sensor:ctx.sensor,before:5}
   var predata
-  var presensor
+
   const res = await puller(template)
+
+  const sensor = await getSensorData(ctx.sensor)
   
-  console.log(res.props)
+  console.log(res.props.data)
 
   return {
     props: {
-      pre: JSON.stringify(res.props),
+      sensor: JSON.stringify(sensor),
+      data: JSON.stringify(res.props.data)
 
     }
+  }
+}
+
+async function getSensorData(devname){
+  const jsonWeather = await postMapData()
+  const jsonSensor = await postMapData("sensors")
+  var resWeather = {}
+  var resSensor = {}
+  for(let res of jsonWeather.rows){
+      if(res.devname == devname){
+          resWeather = {
+            unix_time_s: res.unix_time_s,
+            la: res.latitude_deg,
+            lo: res.longitude_deg
+        }
+        break
+      }
+      
+  }
+  for(let res of jsonSensor.rows){
+      if(res.devname ==devname){
+          resSensor = {
+            miner: res.miner,
+            time_created: res.time_created,
+      }
+      break
+    }
+  }
+
+  return {
+      responseWeather: resWeather,
+      responseSensor: resSensor
   }
 }
 
@@ -202,7 +241,7 @@ async function puller(context) {
 
   ////////////////////// check result of _data ////////////////////////////////////////
   let existing_sensor = false
-  if(_data == JSON.stringify({temperature:[],humidity:[],times:[]})){
+  if(_data == JSON.stringify({temperature:[],humidity:[],pressure:[],times:[]})){
     existing_sensor = false
   }else{
     existing_sensor = true
