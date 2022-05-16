@@ -73,7 +73,7 @@ export default function Graph(props) {
         const template = {sensor:sensor,before:prior}
         const result = puller(template).then(data => {
             const r = getSensorData(sensor).then(sens => {
-              console.log(sens.responseSensor.miner)
+              
                 if(sens.responseSensor.miner != undefined){
                   const _info = {
                       time_created: (new Date(sens.responseSensor.time_created *1000)).toISOString(),
@@ -83,7 +83,7 @@ export default function Graph(props) {
                       lo: sens.responseWeather.lo,
                       miner: sens.responseSensor.miner
                   }
-                  console.log("if")
+
                   setSensorInfo(_info)
                 }else{
                   const _empty = {
@@ -94,7 +94,7 @@ export default function Graph(props) {
                       lo: "",
                       miner: ""
                   }
-                  console.log("else")
+
                   setSensorInfo(_empty)
                 }
                 
