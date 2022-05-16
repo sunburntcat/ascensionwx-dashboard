@@ -5,7 +5,7 @@ import Humidity from "../components/Chart/Humidity"
 import Pressure from "../components/Chart/Pressure"
 import Dashboard from "../components/Dashboard"
 import SensorCard from "../components/View/SensorCard"
-import { getActions, checkCurrentGMT, compare, getData, postMapData } from "../lib/api"
+import { getActions, checkCurrentGMT, compare, getData, postMapData, diff_days } from "../lib/api"
 
 
 
@@ -13,11 +13,16 @@ import { getActions, checkCurrentGMT, compare, getData, postMapData } from "../l
 export default function Graph(props) {
     const json_sensor = JSON.parse(props.sensor)
     const json_data = JSON.parse(props.data)
-    console.log(json_data)
+
+    
     var tmp = json_data     //{temperature:[],humidity:[],pressure:[],times:[]}
+    var date = new Date(json_sensor.responseSensor.time_created * 1000)
+    var st_date = new Date(json_sensor.responseWeather.unix_time_s * 1000)
+
+    
     var sensor_info = {
-      time_created: json_sensor.responseSensor.time_created,
-      status: json_sensor.responseWeather.unix_time_s,
+      time_created: date.toISOString(),
+      status: diff_days(st_date),
       devname: "nxik2maqfxop",
       la: json_sensor.responseWeather.la,
       lo: json_sensor.responseWeather.lo,
@@ -35,11 +40,15 @@ export default function Graph(props) {
     const [errorSensor, setErrorSensor] = useState('')
     ////////////////////////////////
 
-    ////////// Handlers /////////////
+    //--------- Handlers -------------
+    //////////////////////////////
+    // SENSOR ////////////////////
     const handleSensor = (e) => {
       setSensor(e.target.value)
       setErrorSensor('')
     }
+    //////////////////////////////
+    // PRIOR /////////////////////
     const handlePrior = (e) => {
       setPrior(e.target.value)
       var _ = e.target.value
@@ -52,6 +61,8 @@ export default function Graph(props) {
         setErrorPrior('**You should enter a digit')
       }
     }
+    //////////////////////////////
+    // CLICK /////////////////////
     const handleClick = (e) => {
 
       if(!sensor) {
@@ -61,8 +72,36 @@ export default function Graph(props) {
         setLoader(true)
         const template = {sensor:sensor,before:prior}
         const result = puller(template).then(data => {
+            const r = getSensorData(sensor).then(sens => {
+              console.log(sens.responseSensor.miner)
+                if(sens.responseSensor.miner != undefined){
+                  const _info = {
+                      time_created: (new Date(sens.responseSensor.time_created *1000)).toISOString(),
+                      status: diff_days(new Date(sens.responseWeather.unix_time_s*1000)),
+                      devname: sensor,
+                      la: sens.responseWeather.la,
+                      lo: sens.responseWeather.lo,
+                      miner: sens.responseSensor.miner
+                  }
+                  console.log("if")
+                  setSensorInfo(_info)
+                }else{
+                  const _empty = {
+                      time_created: "",
+                      status: "",
+                      devname: "--",
+                      la: "",
+                      lo: "",
+                      miner: ""
+                  }
+                  console.log("else")
+                  setSensorInfo(_empty)
+                }
+                
+                
+            })
           setSeries(data.props.data)
-          setSensorInfo(data.props.data.sensor)
+          
           setPlot("Plot")
           setLoader(false)
           
@@ -151,7 +190,6 @@ export async function getServerSideProps(context) {
 
   const sensor = await getSensorData(ctx.sensor)
   
-  console.log(res.props.data)
 
   return {
     props: {
@@ -205,7 +243,7 @@ async function puller(context) {
   const _devname = context.sensor
   var _before = context.before
   if(!_before) _before = 5
-  _before = _before+1
+  // _before = _before+1
   
   d.setDate(d.getDate() - _before)
   
@@ -217,7 +255,7 @@ async function puller(context) {
   var id = checkCurrentGMT(val)
   // if (id == 0 ){
   //   // add 1hour to the server time
-    d.setHours( d.getHours() + 1 )
+    // d.setHours( d.getHours() + 1 )
     start = d.toISOString()
   // }
   // d.setHours( d.getHours() + 1 )
