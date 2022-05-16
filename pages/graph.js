@@ -97,13 +97,13 @@ export default function Graph(props) {
 
                   setSensorInfo(_empty)
                 }
+                setSeries(data.props.data)
                 
+                setPlot("Plot")
+                setLoader(false)
                 
             })
-          setSeries(data.props.data)
           
-          setPlot("Plot")
-          setLoader(false)
           
         }) 
         
