@@ -13,12 +13,14 @@ import { getActions, checkCurrentGMT, compare, getData, postMapData, diff_days }
 export default function Graph(props) {
     const json_sensor = JSON.parse(props.sensor)
     const json_data = JSON.parse(props.data)
+    console.log(json_sensor)
+
 
     
     var tmp = json_data     //{temperature:[],humidity:[],pressure:[],times:[]}
     var date = new Date(json_sensor.responseSensor.time_created * 1000)
     var st_date = new Date(json_sensor.responseWeather.unix_time_s * 1000)
-
+    
     
     var sensor_info = {
       time_created: date.toISOString(),

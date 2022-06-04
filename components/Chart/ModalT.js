@@ -34,7 +34,7 @@ export default function Modal(props) {
       >
         <div
           className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block
-         sm:p-0"
+         sm:p-0 bg-slate-700"
         >
           <Transition.Child
             as={Fragment}
@@ -62,7 +62,7 @@ export default function Modal(props) {
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div
-              className="inline-block align-bottom bg-white rounded-lg
+              className="inline-block align-bottom bg-red-400 rounded-lg
                 text-left 
                 overflow-hidden shadow-xl 
                 transform transition-all 
