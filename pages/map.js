@@ -18,7 +18,7 @@ export default function Map() {
 
                 
             </Dashboard>
-            <main className="w-8/12 h-[40rem] mt-10 ml-auto mr-auto rounded  shadow-lg border border-gray-200 bg-white">
+            <main className="w-11/12 h-[50rem] mt-10 ml-auto mr-auto rounded  shadow-lg border border-gray-200 bg-white">
                 <MapOverview className={""}/>
             </main>
             <br/>
