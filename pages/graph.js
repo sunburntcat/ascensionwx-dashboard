@@ -13,7 +13,7 @@ import { getActions, checkCurrentGMT, compare, getData, postMapData, diff_days }
 export default function Graph(props) {
     const json_sensor = JSON.parse(props.sensor)
     const json_data = JSON.parse(props.data)
-    console.log(json_sensor)
+    
 
 
     
@@ -185,7 +185,7 @@ export async function getServerSideProps(context) {
   }
 
   const template = {sensor:ctx.sensor,before:5}
-  var predata
+  // var predata
 
   const res = await puller(template)
 
@@ -206,6 +206,10 @@ async function getSensorData(devname){
   const jsonSensor = await postMapData("sensors")
   var resWeather = {}
   var resSensor = {}
+  // console.log(jsonSensor)
+  // console.log(jsonWeather)
+
+  
   for(let res of jsonWeather.rows){
       if(res.devname == devname){
           resWeather = {
