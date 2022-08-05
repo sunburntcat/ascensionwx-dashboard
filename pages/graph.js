@@ -190,7 +190,7 @@ export async function getServerSideProps(context) {
   const res = await puller(template)
 
   const sensor = await getSensorData(ctx.sensor)
-  
+  console.log(res)
 
   return {
     props: {
