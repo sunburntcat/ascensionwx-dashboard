@@ -29,7 +29,7 @@ export default function Graph(props) {
       la: json_sensor.responseWeather.la,
       lo: json_sensor.responseWeather.lo,
       miner: json_sensor.responseSensor.miner,
-      last_temp: "--",
+      last_temp: json_sensor.responseWeather.last_temp,
       last_update: ""
     }
 
@@ -223,7 +223,8 @@ async function getSensorData(devname){
           resWeather = {
             unix_time_s: res.unix_time_s,
             la: res.latitude_deg,
-            lo: res.longitude_deg
+            lo: res.longitude_deg,
+            last_temp: res.temperature_c
         }
         break
       }
