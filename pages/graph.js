@@ -30,7 +30,7 @@ export default function Graph(props) {
       lo: json_sensor.responseWeather.lo,
       miner: json_sensor.responseSensor.miner,
       last_temp: json_sensor.responseWeather.last_temp,
-      last_update: ""
+      last_update: st_date.toISOString()
     }
 
     ////////// STATES ///////////////
@@ -86,8 +86,8 @@ export default function Graph(props) {
                       la: sens.responseWeather.la,
                       lo: sens.responseWeather.lo,
                       miner: sens.responseSensor.miner, 
-                      last_temp: "",
-                      last_update: ""
+                      last_temp: sens.responseWeather.last_temp,
+                      last_update: (new Date(json_sensor.responseWeather.unix_time_s * 1000)).toISOString()
                   }
 
                   setSensorInfo(_info)
@@ -212,10 +212,10 @@ async function getSensorData(devname){
   const jsonSensor = await postMapData("sensors")
   var resWeather = {}
   var resSensor = {}
-  console.log("───────────sensor──────────────")
-  console.log(jsonSensor)
-  console.log("───────────weather──────────────")
-  console.log(jsonWeather)
+  // console.log("───────────sensor──────────────")
+  // console.log(jsonSensor)
+  // console.log("───────────weather──────────────")
+  // console.log(jsonWeather)
 
   
   for(let res of jsonWeather.rows){
