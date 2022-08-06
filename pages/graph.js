@@ -7,11 +7,30 @@ import Dashboard from "../components/Dashboard"
 import SensorCard from "../components/View/SensorCard"
 import { getActions, checkCurrentGMT, compare, getData, postMapData, diff_days } from "../lib/api"
 
-function diff_minute(d) {
+function diff_(d) {
   const today = new Date();
   d = new Date(d);
+  const days = parseInt((today - d) / (1000 * 60 * 60 * 24));
+  const hours = parseInt(Math.abs(today - d) / (1000 * 60 * 60) % 24);
   const minutes = parseInt(Math.abs(today.getTime() - d.getTime()) / (1000 * 60) % 60);
-  return minutes + " minutes ago"
+  const seconds = parseInt(Math.abs(today.getTime() - d.getTime()) / (1000) % 60); 
+  // console.log("days: "+ days)
+  // console.log("hours: "+ hours)
+  // console.log("minutes: "+ minutes)
+  console.log("─────────────────────")
+  if(days == 0) {
+    if(hours == 0) {
+      console.log("minutes: "+ minutes)
+      return minutes + " minute(s) ago"
+    }else{
+      console.log("hours: "+ hours)
+      return hours + " hours(s) ago"
+    }
+    
+  } else {
+    console.log("days: "+ days)
+    return days + " day(s) ago"
+  }
 }
 
 
@@ -33,7 +52,7 @@ export default function Graph(props) {
       lo: json_sensor.responseWeather.lo,
       miner: json_sensor.responseSensor.miner,
       last_temp: json_sensor.responseWeather.last_temp,
-      last_update: diff_minute(json_sensor.responseWeather.unix_time_s * 1000)
+      last_update: diff_(json_sensor.responseWeather.unix_time_s * 1000)
     }
 
     ////////// STATES ///////////////
@@ -90,7 +109,7 @@ export default function Graph(props) {
                       lo: sens.responseWeather.lo,
                       miner: sens.responseSensor.miner, 
                       last_temp: sens.responseWeather.last_temp,
-                      last_update: diff_minute(sens.responseWeather.unix_time_s * 1000)
+                      last_update: diff_(sens.responseWeather.unix_time_s * 1000)
                   }
 
                   setSensorInfo(_info)
@@ -190,7 +209,7 @@ export default function Graph(props) {
 
 export async function getServerSideProps(context) {
   const ctx = {
-    sensor: "nxik2maqfxop",
+    sensor: "nxik2maqfxop", //dxujgds3gkzy nxik2maqfxop
   }
 
   const template = {sensor:ctx.sensor,before:5}
@@ -217,11 +236,11 @@ async function getSensorData(devname){
   var resSensor = {}
   
   for(let res of jsonWeather.rows){
-    console.log("---------")
-    console.log(res.unix_time_s)
+    
       if(res.devname == devname){
-        console.log("++++++++")
-        console.log(res.unix_time_s)
+        // console.log("++++++++")
+        // var day = (new Date(res.unix_time_s *1000)).toISOString()
+        // console.log(diff_(day), day)
           resWeather = {
             unix_time_s: res.unix_time_s,
             la: res.latitude_deg,
