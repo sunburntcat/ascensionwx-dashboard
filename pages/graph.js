@@ -90,7 +90,7 @@ export default function Graph(props) {
                       lo: sens.responseWeather.lo,
                       miner: sens.responseSensor.miner, 
                       last_temp: sens.responseWeather.last_temp,
-                      last_update: diff_minute(json_sensor.responseWeather.unix_time_s * 1000)
+                      last_update: diff_minute(sens.responseWeather.unix_time_s * 1000)
                   }
 
                   setSensorInfo(_info)
@@ -217,7 +217,11 @@ async function getSensorData(devname){
   var resSensor = {}
   
   for(let res of jsonWeather.rows){
+    console.log("---------")
+    console.log(res.unix_time_s)
       if(res.devname == devname){
+        console.log("++++++++")
+        console.log(res.unix_time_s)
           resWeather = {
             unix_time_s: res.unix_time_s,
             la: res.latitude_deg,
