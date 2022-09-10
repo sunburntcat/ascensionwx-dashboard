@@ -1,7 +1,7 @@
 
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { icon } from 'leaflet'
 import L from "leaflet"
 import { postMapData } from '../lib/api'
@@ -11,10 +11,12 @@ import { postMapData } from '../lib/api'
 
 const MapOverview = () => {
   const [rows, setRows] = useState([])
-  const data = postMapData().then(data => {
-    const rows = data.rows
-    setRows(data.rows)
-  })
+  useEffect(() => {
+    const data = postMapData().then(data => {
+      const rows = data.rows
+      setRows(data.rows)
+    })
+  }, [])
 
   
   return (
@@ -26,7 +28,7 @@ const MapOverview = () => {
       {
         rows.map((row) => (
           <Marker key={row.longitude_deg+row.latitude_deg} position={[row.latitude_deg , row.longitude_deg]} style={"width:48, height:48 "}>
-            <Popup>
+            <Popup className='bg-white'>
               Kanda.<br /> {row.latitude_deg} {row.longitude_deg}.
             </Popup>
           </Marker>
