@@ -3,7 +3,7 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect, useState } from 'react'
 import { icon } from 'leaflet'
-import L from "leaflet"
+// import L from "leaflet"  
 import { postMapData } from '../lib/api'
 
 
