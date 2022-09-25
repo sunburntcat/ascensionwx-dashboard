@@ -14,9 +14,7 @@ function diff_(d) {
   const hours = parseInt(Math.abs(today - d) / (1000 * 60 * 60) % 24);
   const minutes = parseInt(Math.abs(today.getTime() - d.getTime()) / (1000 * 60) % 60);
   const seconds = parseInt(Math.abs(today.getTime() - d.getTime()) / (1000) % 60); 
-  // console.log("days: "+ days)
-  // console.log("hours: "+ hours)
-  // console.log("minutes: "+ minutes)
+
   console.log("─────────────────────")
   if(days == 0) {
     if(hours == 0) {
@@ -89,7 +87,7 @@ export default function Graph(props) {
     }
     //////////////////////////////
     // CLICK /////////////////////
-    const handleClick = (e) => {
+    const handleClick = async (e) => {
 
       if(!sensor) {
         setErrorSensor("You should provide a devname")
@@ -97,47 +95,42 @@ export default function Graph(props) {
         setPlot("loading...")
         setLoader(true)
         const template = {sensor:sensor,before:prior}
-        const result = puller(template).then(data => {
-            const r = getSensorData(sensor).then(sens => {
-              
-                if(sens.responseSensor.miner != undefined){
-                  const _info = {
-                      time_created: (new Date(sens.responseSensor.time_created *1000)).toISOString(),
-                      status: diff_days(new Date(sens.responseWeather.unix_time_s*1000)),
-                      devname: sensor,
-                      la: sens.responseWeather.la,
-                      lo: sens.responseWeather.lo,
-                      miner: sens.responseSensor.miner, 
-                      last_temp: sens.responseWeather.last_temp,
-                      last_update: diff_(sens.responseWeather.unix_time_s * 1000)
-                  }
 
-                  setSensorInfo(_info)
-                }else{
-                  const _empty = {
-                      time_created: "",
-                      status: "",
-                      devname: "--",
-                      la: "",
-                      lo: "",
-                      miner: "",
-                      last_temp: "--",
-                      last_update: ""
-                  }
+        const pulled = await puller(template)
+        const sens = await getSensorData(template.sensor)
+        console.log(sens.responseSensor.devname)
 
-                  setSensorInfo(_empty)
-                }
-                setSeries(data.props.data)
-                
-                setPlot("Plot")
-                setLoader(false)
-                
-            })
-          
-        }) 
+        setSeries(pulled.props.data)
+        if(sens.responseSensor.devname != undefined){
+            const _info = {
+              time_created: (new Date(sens.responseSensor.time_created *1000)).toISOString(),
+              status: diff_days(new Date(sens.responseWeather.unix_time_s*1000)),
+              devname: sensor,
+              la: sens.responseWeather.la,
+              lo: sens.responseWeather.lo,
+              miner: sens.responseSensor.miner, 
+              last_temp: sens.responseWeather.last_temp,
+              last_update: diff_(sens.responseWeather.unix_time_s * 1000)
+          }
+          setSensorInfo(_info)
+        }else{
+            const _empty = {
+              time_created: "",
+              status: "",
+              devname: "--",
+              la: "",
+              lo: "",
+              miner: "",
+              last_temp: "--",
+              last_update: ""
+          }
+          setSensorInfo(_empty)
+        }
+        setPlot("Plot")
+        setLoader(false)
+        
         
       }
-      
     }
     
     /////////////////////////////////
@@ -234,13 +227,12 @@ async function getSensorData(devname){
   const jsonSensor = await postMapData("sensors")
   var resWeather = {}
   var resSensor = {}
+
   
   for(let res of jsonWeather.rows){
     
       if(res.devname == devname){
-        // console.log("++++++++")
-        // var day = (new Date(res.unix_time_s *1000)).toISOString()
-        // console.log(diff_(day), day)
+        // console.log("weather:", res)
           resWeather = {
             unix_time_s: res.unix_time_s,
             la: res.latitude_deg,
@@ -252,15 +244,18 @@ async function getSensorData(devname){
       
   }
   for(let res of jsonSensor.rows){
+
       if(res.devname ==devname){
+        // console.log("sensor:", res)
           resSensor = {
-            miner: res.miner,
+            miner: res.miner || "",
             time_created: res.time_created,
+            devname: res.devname,
       }
       break
     }
   }
-
+  
   return {
       responseWeather: resWeather,
       responseSensor: resSensor
@@ -278,7 +273,6 @@ async function puller(context) {
   const _devname = context.sensor
   var _before = context.before
   if(!_before) _before = 5
-  // _before = _before+1
   
   d.setDate(d.getDate() - _before)
   
@@ -288,13 +282,9 @@ async function puller(context) {
   // check GMT index time to different zone
   var val = new Date().toString().match(/([-\+][0-9]+)\s/)[1] 
   var id = checkCurrentGMT(val)
-  // if (id == 0 ){
-  //   // add 1hour to the server time
-    // d.setHours( d.getHours() + 1 )
+
     start = d.toISOString()
-  // }
-  // d.setHours( d.getHours() + 1 )
-  // start = d.toISOString()
+
   /////////////////////////////
 
 

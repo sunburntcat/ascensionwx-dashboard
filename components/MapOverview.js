@@ -13,11 +13,11 @@ const MapOverview = () => {
   const [rows, setRows] = useState([])
   useEffect(() => {
     const data = postMapData().then(data => {
-      const rows = data.rows
+      
       setRows(data.rows)
     })
   }, [])
-
+  console.log(rows)
   
   return (
     <MapContainer center={[6.524400, 3.379199]} zoom={3} scrollWheelZoom={true} style={{height: "100%", width: "100%"}}>
