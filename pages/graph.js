@@ -55,8 +55,8 @@ export default function Graph(props) {
     */
     
     const router = useRouter();
-    const {sensor} = router.query
-    let requested_sensor = sensor;
+    const {devname} = router.query
+    let requested_sensor = devname;
   
     if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
