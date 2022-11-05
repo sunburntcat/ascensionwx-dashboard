@@ -49,7 +49,7 @@ export default function Graph(props) {
     */
     
     const urlParams = new URLSearchParams(window.location.search);
-    const requested_sensor = urlParams.get('sensor');
+    let requested_sensor = urlParams.get('sensor');
   
     if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
