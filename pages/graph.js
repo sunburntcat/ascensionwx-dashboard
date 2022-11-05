@@ -41,11 +41,19 @@ export default function Graph(props) {
     var date = new Date(json_sensor.responseSensor.time_created * 1000)
     var st_date = new Date(json_sensor.responseWeather.unix_time_s * 1000)
     
-    
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop),
+    });
+    let requested_sensor = params.sensor;
+  
+    if ( requested_sensor == "" ) {
+      requested_sensor = 'nxik2maqfxop'
+    }
+      
     var sensor_info = {
       time_created: date.toISOString(),
       status: diff_days(st_date),
-      devname: "nxik2maqfxop",
+      devname: requested_sensor,
       la: json_sensor.responseWeather.la,
       lo: json_sensor.responseWeather.lo,
       miner: json_sensor.responseSensor.miner,
@@ -55,7 +63,7 @@ export default function Graph(props) {
 
     ////////// STATES ///////////////
     const [series, setSeries] = useState(tmp)
-    const [sensor, setSensor] = useState('nxik2maqfxop')
+    const [sensor, setSensor] = useState(requested_sensor)
     const [sensorInfo, setSensorInfo] = useState(sensor_info)
     const [prior, setPrior] = useState(0)
     const [plot, setPlot] = useState("Plot")
