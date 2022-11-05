@@ -222,9 +222,7 @@ export default function Graph(props) {
 
 export async function getServerSideProps(context) {
   
-  const router = useRouter();
-  const {devname} = router.query
-  let requested_sensor = devname;
+  let requested_sensor = context.query.devname;
   
   if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
