@@ -61,10 +61,7 @@ export default function Graph(props) {
     if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
     }
-    
-    
-    //let requested_sensor = 'nxik2maqfxop'
-      
+          
     var sensor_info = {
       time_created: date.toISOString(),
       status: diff_days(st_date),
@@ -224,8 +221,17 @@ export default function Graph(props) {
 
 
 export async function getServerSideProps(context) {
+  
+  const router = useRouter();
+  const {devname} = router.query
+  let requested_sensor = devname;
+  
+  if ( !requested_sensor ) {
+      requested_sensor = 'nxik2maqfxop'
+  }
+  
   const ctx = {
-    sensor: "nxik2maqfxop", //dxujgds3gkzy nxik2maqfxop
+    sensor: requested_sensor, //dxujgds3gkzy nxik2maqfxop
   }
 
   const template = {sensor:ctx.sensor,before:5}
