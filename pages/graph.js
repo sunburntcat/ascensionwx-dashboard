@@ -46,7 +46,7 @@ export default function Graph(props) {
     });
     let requested_sensor = params.sensor;
   
-    if ( requested_sensor == "" ) {
+    if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
     }
       
