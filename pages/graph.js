@@ -46,13 +46,17 @@ export default function Graph(props) {
       get: (searchParams, prop) => searchParams.get(prop),
     });
     let requested_sensor = params.sensor;
+    */
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const requested_sensor = urlParams.get('sensor');
   
     if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
     }
-    */
     
-    let requested_sensor = 'nxik2maqfxop'
+    
+    //let requested_sensor = 'nxik2maqfxop'
       
     var sensor_info = {
       time_created: date.toISOString(),
