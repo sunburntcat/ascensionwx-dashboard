@@ -7,6 +7,8 @@ import Dashboard from "../components/Dashboard"
 import SensorCard from "../components/View/SensorCard"
 import { getActions, checkCurrentGMT, compare, getData, postMapData, diff_days } from "../lib/api"
 
+import { useRouter } from 'next/router'
+
 function diff_(d) {
   const today = new Date();
   d = new Date(d);
@@ -46,10 +48,15 @@ export default function Graph(props) {
       get: (searchParams, prop) => searchParams.get(prop),
     });
     let requested_sensor = params.sensor;
-    */
     
     const urlParams = new URLSearchParams(window.location.search);
     let requested_sensor = urlParams.get('sensor');
+  
+    */
+    
+    const router = useRouter();
+    const {sensor} = router.query
+    let requested_sensor = sensor;
   
     if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
