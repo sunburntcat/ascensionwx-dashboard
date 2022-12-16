@@ -317,7 +317,7 @@ async function puller(context) {
 
  
   // get the response data
-  const res = await getActions( start )
+  const res = await getActions( start, _devname )
 
   // parse into json format
   const json = await res.json()
