@@ -5,7 +5,7 @@ import Humidity from "../components/Chart/Humidity"
 import Pressure from "../components/Chart/Pressure"
 import Dashboard from "../components/Dashboard"
 import SensorCard from "../components/View/SensorCard"
-import { getActions, checkCurrentGMT, compare, getData, postMapData, diff_days } from "../lib/api"
+import { getActions, checkCurrentGMT, compare, getData, getCurrentWeather, getCurrentSensors, diff_days } from "../lib/api"
 
 import { useRouter } from 'next/router'
 
@@ -250,14 +250,21 @@ export async function getServerSideProps(context) {
 }
 
 async function getSensorData(devname){
-  const jsonWeather = await postMapData()
-  const jsonSensor = await postMapData("sensors")
-  var resWeather = {}
-  var resSensor = {}
+  var response = await getCurrentWeather()
 
-  
-  for(let res of jsonWeather.rows){
-    
+  var lower_bound = 0
+  var resWeather = {}
+  var weatherTable = response.rows;
+
+  while( response.more )
+  {
+    lower_bound = response.next_key
+    response = await getCurrentWeather( lower_bound )
+    weatherTable = weatherTable.concat( response.rows )
+  }
+
+  for(let res of weatherTable){
+
       if(res.devname == devname){
         // console.log("weather:", res)
           resWeather = {
@@ -268,12 +275,25 @@ async function getSensorData(devname){
         }
         break
       }
-      
+
   }
-  for(let res of jsonSensor.rows){
+
+  response = await getCurrentSensors()
+
+  var resSensor = {}
+  var sensorTable = response.rows;
+
+  while( response.more )
+  {
+    lower_bound = response.next_key
+    response = await getCurrentSensors( lower_bound )
+    sensorTable = sensorTable.concat( response.rows )
+  }
+
+  for(let res of sensorTable){
 
       if(res.devname ==devname){
-        // console.log("sensor:", res)
+          //console.log("sensor:", res)
           resSensor = {
             miner: res.miner || "",
             time_created: res.time_created,
@@ -282,7 +302,7 @@ async function getSensorData(devname){
       break
     }
   }
-  
+
   return {
       responseWeather: resWeather,
       responseSensor: resSensor
