@@ -4,8 +4,8 @@ import TopHeader from "./TopHeader";
 
 const navigation = [
   { name: 'Overview', href: '/' },
-  { name: 'Graph', href: '/graph' },
-  { name: 'Map', href: '/map' },
+  { name: 'Graph', href: '/graph' }
+  //{ name: 'Map', href: '/map' },
 ]
 
 export function Layout({children})  {
