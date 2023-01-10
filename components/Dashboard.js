@@ -1,10 +1,10 @@
 import TopHeader from "./TopHeader"
-
+  
 
 const navigation = [
     { name: 'Overview', href: '/' },
-    { name: 'Graph', href: '/graph' },
-    { name: 'Map', href: '/map' },
+    { name: 'Graph', href: '/graph' }
+    //{ name: 'Map', href: '/map' },
   ]
 
 export default function Dashboard({children}) {
@@ -25,15 +25,15 @@ export default function Dashboard({children}) {
                     <TopHeader links={navigation} />
 
                     {/* children */}
-                        <> 
+                        <>
                             {children}
                         </>
                     {/* End children */}
 
-                
+
                 </div>
             </div>
-        
+
         </div>
     )
 }
