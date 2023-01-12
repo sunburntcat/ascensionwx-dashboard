@@ -5,6 +5,7 @@ import { ViewGridIcon } from '@heroicons/react/outline';
 // import Temp from "../View/Temp"
 import Pres from '../View/Pres';
 import Hum from '../View/Hum';
+import Volt from '../View/Volt';
 import dynamic from 'next/dynamic';
 const Temp = dynamic(() => import("../View/Temp"), {
   loading: () => "Loading...",
@@ -101,6 +102,12 @@ export default function Modal(props) {
                       {
                         props.name == "Humidity" ?
                         (<Hum values={props.data}/>)
+                        :
+                        (<></>)
+                      }
+                      {
+                        props.name == "Voltage" ?
+                        (<Volt values={props.data}/>)
                         :
                         (<></>)
                       }
