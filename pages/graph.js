@@ -206,11 +206,13 @@ export default function Graph(props) {
                     <div className="m-4 grid gap-4 grid-cols-1">
                       <Voltage values={series} />
                     </div>
-                    <div className="m-4 grid gap-4 grid-cols-2">
+                    <div className="m-4 grid gap-4 grid-cols-1">
                       <Temperature values={series} />
+                    </div>
+                    <div className="m-4 grid gap-4 grid-cols-1">
                       <Humidity values={series} />
                     </div>
-                    <div className="m-4 grid gap-4 grid-cols-2">
+                    <div className="m-4 grid gap-4 grid-cols-1">
                         <Pressure values={series} />
                     </div>
                   </div>
