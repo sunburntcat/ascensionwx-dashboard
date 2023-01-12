@@ -16,7 +16,7 @@ function diff_(d) {
   const days = parseInt((today - d) / (1000 * 60 * 60 * 24));
   const hours = parseInt(Math.abs(today - d) / (1000 * 60 * 60) % 24);
   const minutes = parseInt(Math.abs(today.getTime() - d.getTime()) / (1000 * 60) % 60);
-  const seconds = parseInt(Math.abs(today.getTime() - d.getTime()) / (1000) % 60);
+  const seconds = parseInt(Math.abs(today.getTime() - d.getTime()) / (1000) % 60); 
 
   console.log("─────────────────────")
   if(days == 0) {
@@ -27,7 +27,7 @@ function diff_(d) {
       console.log("hours: "+ hours)
       return hours + " hours(s) ago"
     }
-
+    
   } else {
     console.log("days: "+ days)
     return days + " day(s) ago"
@@ -38,12 +38,12 @@ function diff_(d) {
 export default function Graph(props) {
     const json_sensor = JSON.parse(props.sensor)
     const json_data = JSON.parse(props.data)
-
-
+    
+    
     var tmp = json_data     //{temperature:[],humidity:[],pressure:[],times:[]}
     var date = new Date(json_sensor.responseSensor.time_created * 1000)
     var st_date = new Date(json_sensor.responseWeather.unix_time_s * 1000)
-
+    
     /*
     const params = new Proxy(new URLSearchParams(window.location.search), {
       get: (searchParams, prop) => searchParams.get(prop),
@@ -54,15 +54,15 @@ export default function Graph(props) {
     let requested_sensor = urlParams.get('sensor');
   
     */
-
+    
     const router = useRouter();
     const {devname} = router.query
     let requested_sensor = devname;
-
+  
     if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
     }
-
+          
     var sensor_info = {
       time_created: date.toISOString(),
       status: diff_days(st_date),
@@ -97,7 +97,7 @@ export default function Graph(props) {
     const handlePrior = (e) => {
       setPrior(e.target.value)
       var _ = e.target.value
-
+      
       if (_.match(/^[0-9]+$/) != null ) {
         setErrorPrior("")
       }else if(e.target.value == ""){
@@ -108,7 +108,7 @@ export default function Graph(props) {
     }
     //////////////////////////////
     // CLICK /////////////////////
-        const handleClick = async (e) => {
+    const handleClick = async (e) => {
 
       if(!sensor) {
         setErrorSensor("You should provide a devname")
@@ -129,7 +129,7 @@ export default function Graph(props) {
               devname: sensor,
               la: sens.responseWeather.la,
               lo: sens.responseWeather.lo,
-              miner: sens.responseSensor.miner,
+              miner: sens.responseSensor.miner, 
               last_temp: sens.responseWeather.last_temp,
               last_update: diff_(sens.responseWeather.unix_time_s * 1000)
           }
@@ -149,13 +149,14 @@ export default function Graph(props) {
         }
         setPlot("Plot")
         setLoader(false)
-
-
+        
+        
       }
     }
-  
-    ////////////
-        
+    
+    /////////////////////////////////
+
+
     return (
         <>
           <Dashboard className="sticky">
@@ -183,14 +184,14 @@ export default function Graph(props) {
                     </button>
                 </div>
             </div>
-
+            
             {/* ------------------------- */}
             <hr className="mt-3"/>
 
             {/* ------------------------- */}
             <div className="mt-5">
               {
-                loader ?
+                loader ? 
                   <div className="mt-28">
                     <Waiting />
                     <p className=" mt-10 text-center text-gray-500 font-medium text-xl">
@@ -218,19 +219,20 @@ export default function Graph(props) {
             <br/>
 
           </Dashboard>
-
-        </>
+      
+        </>            
     )
 }
 
+
 export async function getServerSideProps(context) {
-
+  
   let requested_sensor = context.query.devname;
-
+  
   if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
   }
-
+  
   const ctx = {
     sensor: requested_sensor, //dxujgds3gkzy nxik2maqfxop
   }
@@ -267,10 +269,10 @@ async function getSensorData(devname){
   }
 
   for(let res of weatherTable){
-
+    
       if(res.devname == devname){
         // console.log("weather:", res)
-          resWeather = { 
+          resWeather = {
             unix_time_s: res.unix_time_s,
             la: res.latitude_deg,
             lo: res.longitude_deg,
@@ -278,7 +280,7 @@ async function getSensorData(devname){
         }
         break
       }
-
+      
   }
 
   response = await getCurrentSensors()
@@ -305,7 +307,7 @@ async function getSensorData(devname){
       break
     }
   }
-
+  
   return {
       responseWeather: resWeather,
       responseSensor: resSensor
@@ -317,20 +319,20 @@ async function puller(context) {
 
   // get the start time and the name of the device sensor
   let d = new Date();
-
-
+  
+  
   ///////////////////////////// pre config ////////////////////////////
   const _devname = context.sensor
   var _before = context.before
   if(!_before) _before = 5
-
+  
   d.setDate(d.getDate() - _before)
-
+  
   // set the day to [today - 'before' days] in iso format
   let start = d.toISOString()
 
   // check GMT index time to different zone
-  var val = new Date().toString().match(/([-\+][0-9]+)\s/)[1]
+  var val = new Date().toString().match(/([-\+][0-9]+)\s/)[1] 
   var id = checkCurrentGMT(val)
 
     start = d.toISOString()
@@ -338,7 +340,7 @@ async function puller(context) {
   /////////////////////////////
 
 
-
+ 
   // get the response data
   const res = await getActions( start, _devname )
 
@@ -373,7 +375,7 @@ async function puller(context) {
   }
   //////////////////////////////////////////////
 
- 
+
   return {
     props: {
       data: parsed || JSON.stringify({}), //_data
