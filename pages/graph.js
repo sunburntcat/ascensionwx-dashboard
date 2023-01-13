@@ -292,12 +292,9 @@ async function getSensorData(devname){
     last_press: res.pressure_hpa,
   }
 
-  response = await getTableEntry( devname, "sensorsv3" )
-  res = response.rows[0]
-  var resSensor = {
-    time_created: res.time_created,
-    devname: res.devname,
-  }
+  //response = await getTableEntry( devname, "sensorsv3" )
+  //res = response.rows[0]
+  var resSensor = {}
 
   response = await getTableEntry( devname, "rewardsv2" )
   res = response.rows[0]
