@@ -6,7 +6,7 @@ import Pressure from "../components/Chart/Pressure"
 import Voltage from "../components/Chart/Voltage"
 import Dashboard from "../components/Dashboard"
 import SensorCard from "../components/View/SensorCard"
-import { getActions, checkCurrentGMT, compare, getData, getCurrentWeather, getCurrentSensors, diff_days } from "../lib/api"
+import { getActions, getTableEntry, checkCurrentGMT, compare, getData, diff_days } from "../lib/api"
 
 import { useRouter } from 'next/router'
 
@@ -62,6 +62,20 @@ export default function Graph(props) {
     if ( !requested_sensor ) {
       requested_sensor = 'nxik2maqfxop'
     }
+
+    let minerValue = ""
+    if ( json_sensor.responseMiner.evm_send_enabled ) {
+      minerValue = json_sensor.responseMiner.evm_address_str
+    } else {
+      minerValue = json_sensor.responseRewards.miner
+    }
+
+    let last_day_pay = "0.00"
+    let now = new Date()
+    let time_24_hrs_ago = now - (1000*3600*24)
+    let last_miner_payout = Number( json_sensor.responseRewards.last_miner_payout )*1000
+    if( last_miner_payout > time_24_hrs_ago )
+      last_day_pay = json_sensor.responseMiner.previous_day_pay_usd
           
     var sensor_info = {
       time_created: date.toISOString(),
@@ -69,8 +83,11 @@ export default function Graph(props) {
       devname: requested_sensor,
       la: json_sensor.responseWeather.la,
       lo: json_sensor.responseWeather.lo,
-      miner: json_sensor.responseSensor.miner,
+      miner: minerValue,
+      last_pay: last_day_pay,
       last_temp: json_sensor.responseWeather.last_temp,
+      last_hum: json_sensor.responseWeather.last_hum,
+      last_press: json_sensor.responseWeather.last_press,
       last_update: diff_(json_sensor.responseWeather.unix_time_s * 1000)
     }
 
@@ -121,6 +138,18 @@ export default function Graph(props) {
         const sens = await getSensorData(template.sensor)
         console.log(sens.responseSensor.devname)
 
+	let minerValue = ""
+        if ( json_sensor.responseMiner.evm_send_enabled ) {
+          minerValue = json_sensor.responseMiner.evm_address_str
+        } else {
+          minerValue = json_sensor.responseRewards.miner
+        }
+
+	let last_day_pay = "0.00"
+	let time_24_hrs_ago = new Date() - (1000*3600*24)
+	if( new Date(json_sensor.responseRewards.last_miner_payout*1000) > time_24_hrs_ago )
+          last_day_pay = json_sensor.responseMiner.previous_day_pay_usd
+
         setSeries(pulled.props.data)
         if(sens.responseSensor.devname != undefined){
             const _info = {
@@ -129,7 +158,8 @@ export default function Graph(props) {
               devname: sensor,
               la: sens.responseWeather.la,
               lo: sens.responseWeather.lo,
-              miner: sens.responseSensor.miner, 
+              miner: minerValue, 
+              last_pay: last_day_pay, 
               last_temp: sens.responseWeather.last_temp,
               last_update: diff_(sens.responseWeather.unix_time_s * 1000)
           }
@@ -168,13 +198,6 @@ export default function Graph(props) {
                     <input onChange={handleSensor} defaultValue={sensor? sensor : ""} className="shadow appearance-none border rounded py-2 px-3 text-gray-700 text-sm leading-tight focus:outline-none focus:shadow-outline hover:border-purple-500" id="sensor" type="text" placeholder="_devname" />
                     <p className="block text-red-400 text-sm font-bold mb-2">{errorSensor}</p>
                 </div>
-                <div className="md:ml-5 sm:ml-2">
-                    <label className="block text-gray-400 text-sm font-bold mb-2" >
-                    Prior number of day
-                    </label>
-                    <input onChange={handlePrior} className="shadow appearance-none border rounded py-2 px-3 text-gray-700 text-sm leading-tight focus:outline-none focus:shadow-outline hover:border-purple-500" id="digit" type="text" placeholder="_number" />
-                    <p className="block text-red-400 text-sm font-bold mb-2">{errorPrior}</p>
-                </div>
                 <div className="md:ml-5 sm:ml-5 md:py-0">
                     <label className="block text-violet-400 text-sm font-bold mb-2" >
                     * must be provided
@@ -200,7 +223,7 @@ export default function Graph(props) {
                   </div>
                   :
                   <div className="">
-                    <div className="m-1 grid gap-4 grid-cols-1">
+                    <div className="m-60 grid gap-4 grid-cols-1">
                       <SensorCard sensor={sensorInfo} />
                     </div>
                     <div className="m-4 grid gap-4 grid-cols-1">
@@ -257,62 +280,48 @@ export async function getServerSideProps(context) {
 }
 
 async function getSensorData(devname){
-  var response = await getCurrentWeather()
 
-  var lower_bound = 0
-  var resWeather = {}
-  var weatherTable = response.rows;
-
-  while( response.more )
-  {
-    lower_bound = response.next_key
-    response = await getCurrentWeather( lower_bound )
-    weatherTable = weatherTable.concat( response.rows )
+  var response = await getTableEntry( devname, "weather" )
+  var res = response.rows[0]
+  var resWeather = {
+    unix_time_s: res.unix_time_s,
+    la: res.latitude_deg,
+    lo: res.longitude_deg,
+    last_temp: res.temperature_c,
+    last_hum: res.humidity_percent,
+    last_press: res.pressure_hpa,
   }
 
-  for(let res of weatherTable){
-    
-      if(res.devname == devname){
-        // console.log("weather:", res)
-          resWeather = {
-            unix_time_s: res.unix_time_s,
-            la: res.latitude_deg,
-            lo: res.longitude_deg,
-            last_temp: res.temperature_c
-        }
-        break
-      }
-      
+  response = await getTableEntry( devname, "sensorsv3" )
+  res = response.rows[0]
+  var resSensor = {
+    time_created: res.time_created,
+    devname: res.devname,
   }
 
-  response = await getCurrentSensors()
-
-  var resSensor = {}
-  var sensorTable = response.rows;
-
-  while( response.more )
-  {
-    lower_bound = response.next_key
-    response = await getCurrentSensors( lower_bound )
-    sensorTable = sensorTable.concat( response.rows )
+  response = await getTableEntry( devname, "rewardsv2" )
+  res = response.rows[0]
+  let miner = res.miner
+  var resRewards = {
+    devname: res.devname,
+    miner: res.miner,
+    last_miner_payout: res.last_miner_payout,
   }
 
-  for(let res of sensorTable){
-
-      if(res.devname ==devname){
-          //console.log("sensor:", res)
-          resSensor = {
-            miner: res.miner || "",
-            time_created: res.time_created,
-            devname: res.devname,
-      }
-      break
-    }
+  response = await getTableEntry( miner, "minersv2" )
+  res = response.rows[0]
+  var resMiner = {
+    miner: res.miner,
+    evm_address_str: res.evm_address_str,
+    evm_send_enabled: res.evm_send_enabled,
+    previous_day_pay_usd: res.previous_day_pay_usd
   }
-  
+
   return {
       responseWeather: resWeather,
-      responseSensor: resSensor
+      responseSensor: resSensor,
+      responseRewards: resRewards,
+      responseMiner: resMiner
   }
 }
 
