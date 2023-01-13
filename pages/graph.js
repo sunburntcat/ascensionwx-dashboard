@@ -190,7 +190,7 @@ export default function Graph(props) {
     return (
         <>
           <Dashboard className="sticky">
-            <div className="justify-end max-w-7xl md:mx-auto flex mt-6 ml-2">
+            <div className="ml-2 max-w-7xl flex mt-6">
                 <div>
                     <label className="block text-gray-400 text-sm font-bold mb-2" >
                     Sensor *
