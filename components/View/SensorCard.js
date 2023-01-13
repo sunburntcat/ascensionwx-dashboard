@@ -20,7 +20,7 @@ export default function SensorCard(props) {
     return (
       <div className='rounded overflow-hidden shadow-lg border border-gray-200 bg-white'>
         <div className=''>
-            <div className="p-12 ml-5">
+            <div className="p-12 ml-1">
                 <h5 className="mt-1 mb-4 text-xl font-medium text-[#8C01AA]"> Sensor Information</h5>
                 <div className="flex items-baseline text-gray-900">
                     <span className="ml-5 text-xl font-normal text-gray-500 ">Devname:</span>
