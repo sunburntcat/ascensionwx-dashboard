@@ -21,7 +21,8 @@ function Pressure(props) {
         type: "x",
         enabled: true,
       },
-    },  
+    },
+    title: { text: "Air Pressure", align: 'center' },
     dataLabels: {
       enabled: false,
       enabledOnSeries: [1]
