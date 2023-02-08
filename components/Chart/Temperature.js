@@ -33,9 +33,7 @@ function Temperature(props) {
         enabled: true,
       },
     },
-    title:{
-      text: ""
-    },
+    title: { text: "Temperature", align: 'center' },
     dataLabels: {
       enabled: false,
       enabledOnSeries: [1]
