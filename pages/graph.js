@@ -4,6 +4,9 @@ import Temperature from "../components/Chart/Temperature"
 import Humidity from "../components/Chart/Humidity"
 import Pressure from "../components/Chart/Pressure"
 import Voltage from "../components/Chart/Voltage"
+import Rain from "../components/Chart/Rain"
+import Windspd from "../components/Chart/Windspd"
+import Winddir from "../components/Chart/Winddir"
 import Dashboard from "../components/Dashboard"
 import SensorCard from "../components/View/SensorCard"
 import { getActions, getTableEntry, checkCurrentGMT, compare, getData, diff_days } from "../lib/api"
@@ -81,6 +84,8 @@ export default function Graph(props) {
       time_created: date.toISOString(),
       status: diff_days(st_date),
       devname: requested_sensor,
+      sensor_type: json_sensor.responseSensor.station_type,
+      msg_type: json_sensor.responseSensor.message_type,
       la: json_sensor.responseWeather.la,
       lo: json_sensor.responseWeather.lo,
       miner: minerValue,
@@ -135,8 +140,8 @@ export default function Graph(props) {
         const template = {sensor:sensor,before:prior}
 
         const pulled = await puller(template)
-        const sens = await getSensorData(template.sensor)
-        console.log(sens.responseSensor.devname)
+        const json_sensor = await getSensorData(template.sensor)
+        console.log(json_sensor.responseSensor.devname)
 
 	let minerValue = ""
         if ( json_sensor.responseMiner.evm_send_enabled ) {
@@ -145,23 +150,30 @@ export default function Graph(props) {
           minerValue = json_sensor.responseRewards.miner
         }
 
-	let last_day_pay = "0.00"
-	let time_24_hrs_ago = new Date() - (1000*3600*24)
-	if( new Date(json_sensor.responseRewards.last_miner_payout*1000) > time_24_hrs_ago )
-          last_day_pay = json_sensor.responseMiner.previous_day_pay_usd
+        let last_day_pay = "0.00"
+        let now = new Date()
+        let time_24_hrs_ago = now - (1000*3600*24)
+        let last_miner_payout = Number( json_sensor.responseRewards.last_miner_payout )*1000
+        if( last_miner_payout > time_24_hrs_ago )
+            last_day_pay = json_sensor.responseMiner.previous_day_pay_usd
 
+          
         setSeries(pulled.props.data)
-        if(sens.responseSensor.devname != undefined){
+        if(json_sensor.responseSensor.devname != undefined){
             const _info = {
-              time_created: (new Date(sens.responseSensor.time_created *1000)).toISOString(),
-              status: diff_days(new Date(sens.responseWeather.unix_time_s*1000)),
+              time_created: (new Date(json_sensor.responseSensor.time_created *1000)).toISOString(),
+              status: diff_days(new Date(json_sensor.responseWeather.unix_time_s*1000)),
               devname: sensor,
-              la: sens.responseWeather.la,
-              lo: sens.responseWeather.lo,
+	      sensor_type: json_sensor.responseSensor.station_type,
+	      msg_type: json_sensor.responseSensor.message_type,
+              la: json_sensor.responseWeather.la,
+              lo: json_sensor.responseWeather.lo,
               miner: minerValue, 
               last_pay: last_day_pay, 
-              last_temp: sens.responseWeather.last_temp,
-              last_update: diff_(sens.responseWeather.unix_time_s * 1000)
+              last_temp: json_sensor.responseWeather.last_temp,
+              last_hum: json_sensor.responseWeather.last_hum,
+              last_press: json_sensor.responseWeather.last_press,
+              last_update: diff_(json_sensor.responseWeather.unix_time_s * 1000)
           }
           setSensorInfo(_info)
         }else{
@@ -169,10 +181,14 @@ export default function Graph(props) {
               time_created: "",
               status: "",
               devname: "--",
+              sensor_type: "--",
+              msg_type: "--",
               la: "",
               lo: "",
               miner: "",
               last_temp: "--",
+              last_hum: "--",
+              last_press: "--",
               last_update: ""
           }
           setSensorInfo(_empty)
@@ -186,6 +202,17 @@ export default function Graph(props) {
     
     /////////////////////////////////
 
+    let hidden_volt_str = "hidden"
+    if( sensorInfo.sensor_type === "ascension3dp" )
+          hidden_volt_str = ""
+
+    let hidden_rain_str = "hidden"
+    if( sensorInfo.msg_type.includes("rain") )
+          hidden_rain_str = ""
+
+    let hidden_wind_str = "hidden"
+    if( sensorInfo.msg_type.includes("wind") )
+          hidden_wind_str = ""
 
     return (
         <>
@@ -193,15 +220,12 @@ export default function Graph(props) {
             <div className="justify-end max-w-7xl md:mx-auto flex mt-14">
                 <div>
                     <label className="block text-gray-400 text-sm font-bold mb-2" >
-                    Sensor *
+                    Station
                     </label>
                     <input onChange={handleSensor} defaultValue={sensor? sensor : ""} className="shadow appearance-none border rounded py-2 px-3 text-gray-700 text-sm leading-tight focus:outline-none focus:shadow-outline hover:border-purple-500" id="sensor" type="text" placeholder="_devname" />
                     <p className="block text-red-400 text-sm font-bold mb-2">{errorSensor}</p>
                 </div>
                 <div className="md:ml-5 sm:ml-5 md:py-0">
-                    <label className="block text-violet-400 text-sm font-bold mb-2" >
-                    * must be provided
-                    </label>
                     <button onClick={handleClick} className="appearance-none border rounded py-2 px-3 text-white bg-[#C416EC] text-sm font-bold leading-tight focus:outline-none shadow-md w-40 hover:bg-purple-600 duration-300" name="click">
                         {plot}
                     </button>
@@ -235,8 +259,17 @@ export default function Graph(props) {
                     <div className="m-4 grid gap-4 grid-cols-1">
                         <Pressure values={series} />
                     </div>
-                    <div className="m-4 grid gap-4 grid-cols-1">
+                    <div className={hidden_volt_str + " m-1 grid gap-4 grid-cols-1"}>
                       <Voltage values={series} />
+                    </div>
+                    <div className={hidden_rain_str + " m-1 grid gap-4 grid-cols-1"}>
+                      <Rain values={series} />
+                    </div>
+                    <div className={hidden_wind_str + " m-1 grid gap-4 grid-cols-1"}>
+                      <Winddir values={series} />
+                    </div>
+                    <div className={hidden_wind_str + " m-1 grid gap-4 grid-cols-1"}>
+                      <Windspd values={series} />
                     </div>
                   </div>
               }
@@ -297,6 +330,8 @@ async function getSensorData(devname){
   var resSensor = {    
     time_created: res.time_created,
     devname: res.devname,
+    station_type: res.station_type,
+    message_type: res.message_type,
   }
 
   response = await getTableEntry( devname, "rewardsv2" )
