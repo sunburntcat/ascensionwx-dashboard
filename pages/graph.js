@@ -266,10 +266,10 @@ export default function Graph(props) {
                       <Rain values={series} />
                     </div>
                     <div className={hidden_wind_str + " m-1 grid gap-4 grid-cols-1"}>
-                      <Winddir values={series} />
+                      <Windspd values={series} />
                     </div>
                     <div className={hidden_wind_str + " m-1 grid gap-4 grid-cols-1"}>
-                      <Windspd values={series} />
+                      <Winddir values={series} />
                     </div>
                   </div>
               }
