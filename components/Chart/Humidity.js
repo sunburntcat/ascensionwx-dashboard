@@ -20,7 +20,8 @@ function Humidity(props) {
         type: "x",
         enabled: true,
       },
-    },  
+    },
+    title: { text: "Humidity", align: 'center' },
     dataLabels: {
       enabled: false,
       enabledOnSeries: [1]
