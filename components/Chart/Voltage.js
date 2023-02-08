@@ -21,6 +21,7 @@ function Voltage(props) {
         enabled: true,
       },
     },
+    title: { text: "Sensor Voltage", align: 'center' },
     dataLabels: {
       enabled: false,
       enabledOnSeries: [1]
