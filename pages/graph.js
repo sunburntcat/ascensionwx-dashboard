@@ -225,6 +225,7 @@ export default function Graph(props) {
                     <input onChange={handleSensor} defaultValue={sensor? sensor : ""} className="shadow appearance-none border rounded py-2 px-3 text-gray-700 text-sm leading-tight focus:outline-none focus:shadow-outline hover:border-purple-500" id="sensor" type="text" placeholder="_devname" />
                     <p className="block text-red-400 text-sm font-bold mb-2">{errorSensor}</p>
                 </div>
+                <label className="block text-violet-400 text-sm font-bold mb-2" > </label>
                 <div className="md:ml-5 sm:ml-5 md:py-0">
                     <button onClick={handleClick} className="appearance-none border rounded py-2 px-3 text-white bg-[#C416EC] text-sm font-bold leading-tight focus:outline-none shadow-md w-40 hover:bg-purple-600 duration-300" name="click">
                         {plot}
