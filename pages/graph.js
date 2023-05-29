@@ -5,6 +5,7 @@ import Humidity from "../components/Chart/Humidity"
 import Pressure from "../components/Chart/Pressure"
 import Voltage from "../components/Chart/Voltage"
 import Rain from "../components/Chart/Rain"
+import Light from "../components/Chart/Light"
 import Windspd from "../components/Chart/Windspd"
 import Winddir from "../components/Chart/Winddir"
 import Dashboard from "../components/Dashboard"
@@ -63,7 +64,7 @@ export default function Graph(props) {
     let requested_sensor = devname;
   
     if ( !requested_sensor ) {
-      requested_sensor = 'nxik2maqfxop'
+      requested_sensor = 'brownlotguru'
     }
 
     let minerValue = ""
@@ -210,6 +211,10 @@ export default function Graph(props) {
     if( sensorInfo.msg_type.includes("rain") )
           hidden_rain_str = ""
 
+    let hidden_solar_str = "hidden"
+    if( sensorInfo.msg_type.includes("solar") )
+          hidden_solar_str = ""
+
     let hidden_wind_str = "hidden"
     if( sensorInfo.msg_type.includes("wind") )
           hidden_wind_str = ""
@@ -266,6 +271,9 @@ export default function Graph(props) {
                     <div className={hidden_rain_str + " m-1 grid gap-4 grid-cols-1"}>
                       <Rain values={series} />
                     </div>
+                    <div className={hidden_solar_str + " m-1 grid gap-4 grid-cols-1"}>
+                      <Light values={series} />
+                    </div>
                     <div className={hidden_wind_str + " m-1 grid gap-4 grid-cols-1"}>
                       <Windspd values={series} />
                     </div>
@@ -289,7 +297,7 @@ export async function getServerSideProps(context) {
   let requested_sensor = context.query.devname;
   
   if ( !requested_sensor ) {
-      requested_sensor = 'nxik2maqfxop'
+      requested_sensor = 'brownlotguru'
   }
   
   const ctx = {
