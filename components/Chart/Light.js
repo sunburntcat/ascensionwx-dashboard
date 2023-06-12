@@ -10,15 +10,14 @@ function Light(props) {
 
     var series = [{
       name: 'Light',
-      type: 'area',
       data: tmp.light
     }]
     
     var options = {
       chart: {
-      type: 'area',
+      type: 'scatter',
       zoom: {
-        type: "x",
+        type: "xy",
         enabled: true,
       },
     },
@@ -47,16 +46,6 @@ function Light(props) {
   ],
     legend: {
       show: false
-    },
-    fill: {
-    type: 'gradient',
-    gradient: {
-      shadeIntensity: 1,
-      inverseColors: false,
-      opacityFrom: 0.7,
-      opacityTo: 0,
-      stops: [0, 90, 100]
-        }
     }
 }
     
@@ -68,7 +57,7 @@ function Light(props) {
                 "Full view"
               }
             </button>
-            <ApexCharts width="100%" options={options} series={series} type="area"/>
+            <ApexCharts width="100%" options={options} series={series} type="scatter"/>
         </div>
         {
           show ?
