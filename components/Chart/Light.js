@@ -10,14 +10,15 @@ function Light(props) {
 
     var series = [{
       name: 'Light',
+      type: 'bar',
       data: tmp.light
     }]
     
     var options = {
       chart: {
-      type: 'scatter',
+      type: 'bar',
       zoom: {
-        type: "xy",
+        type: "x",
         enabled: true,
       },
     },
@@ -57,7 +58,7 @@ function Light(props) {
                 "Full view"
               }
             </button>
-            <ApexCharts width="100%" options={options} series={series} type="scatter"/>
+            <ApexCharts width="100%" options={options} series={series} type="bar"/>
         </div>
         {
           show ?
