@@ -8,7 +8,7 @@ export default function WindyRain24(props) {
                 <div className="justify-evenly p-8 ml-0">
                     <center><font size="5">ECMWF Rain Accumulation Forecast (mm)</font></center>
                     <br />
-                    <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=kt&zoom=5&overlay=rainAccu&product=ecmwf&level=surface&lat=7.2571&lon=5.205&detailLat=7.2571&detailLon=5.2058&detail=false"
+                    <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=kt&zoom=2&overlay=rainAccu&product=ecmwf&level=surface&lat=5.0377&lon=7.9128&detailLat=5.0377&detailLon=7.9128&detail=false"
                             height="400"
                             width="560"
                             align="middle"
