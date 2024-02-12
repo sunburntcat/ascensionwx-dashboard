@@ -27,7 +27,7 @@ export default function Forecast7Day(props) {
                     </iframe>
                     <div><a
                         href="https://www.meteoblue.com/en/weather/week/akure_nigeria_2350841?utm_source=weather_widget&utm_medium=linkus&utm_content=daily&utm_campaign=Weather%2BWidget"
-                        target="_blank" rel="noopener"></a>
+                        target="_blank" rel="noreferrer"></a>
                     </div>
                 </div>
             </div>
