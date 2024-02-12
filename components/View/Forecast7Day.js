@@ -1,8 +1,5 @@
 import {conversion} from '../../lib/api'
 
-import {Helmet} from "react-helmet";
-
-
 export default function Forecast7Day(props) {
 
     function update(d, s, id)
