@@ -16,7 +16,7 @@ export default function WindyForecast(props) {
                         </iframe>
                         <a
                             href="https://www.meteoblue.com/en/weather/week/akure_nigeria_2350841?utm_source=weather_widget&utm_medium=linkus&utm_content=daily&utm_campaign=Weather%2BWidget"
-                            target="_blank" rel="noopener">
+                            target="_blank" rel="noreferrer">
                         </a>
                         <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=%C2%B0C&metricWind=default&zoom=1&overlay=wind&product=ecmwf&level=surface&lat=23.28&lon=-32.45&detailLat=7.2571&detailLon=5.2058&detail=false"
                                 height="350"
