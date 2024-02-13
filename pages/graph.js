@@ -10,14 +10,6 @@ import Windspd from "../components/Chart/Windspd"
 import Winddir from "../components/Chart/Winddir"
 import Dashboard from "../components/Dashboard"
 import SensorCard from "../components/View/SensorCard"
-import AodNorthAfrica from "../components/View/AodNorthAfrica"
-
-import Forecast7Day from "../components/View/Forecast7Day"
-import WindyForecast from "../components/View/WindyForecast"
-import WindyRain24 from "../components/View/WindyRain24"
-import WindyDrought from "../components/View/WindyDrought"
-import WindySatellite from "../components/View/WindySatellite"
-
 import { getActions, getTableEntry, checkCurrentGMT, compare, getData, diff_days } from "../lib/api"
 
 import { useRouter } from 'next/router'
@@ -72,7 +64,7 @@ export default function Graph(props) {
     let requested_sensor = devname;
   
     if ( !requested_sensor ) {
-      requested_sensor = 'bigoceanfish'
+      requested_sensor = 'brownlotguru'
     }
 
     let minerValue = ""
@@ -105,16 +97,10 @@ export default function Graph(props) {
       last_update: diff_(json_sensor.responseWeather.unix_time_s * 1000)
     }
 
-    var aerosol_info = {
-        forecast_start: 0,
-        forecast_end : 0
-    }
-
     ////////// STATES ///////////////
     const [series, setSeries] = useState(tmp)
     const [sensor, setSensor] = useState(requested_sensor)
     const [sensorInfo, setSensorInfo] = useState(sensor_info)
-    const [aerosolInfo, setAerosolInfo] = useState(aerosol_info)
     const [prior, setPrior] = useState(0)
     const [plot, setPlot] = useState("Plot")
     const [loader, setLoader] = useState(false)
@@ -236,22 +222,16 @@ export default function Graph(props) {
     return (
         <>
           <Dashboard className="sticky">
-            <div className="justify-center max-w-7xl md:mx-auto flex">
-                <div>
-                    <img src="AgroXchange_logo.png" alt="AgroXchange Logo"></img>
-                </div>
-            </div>
-              <div className="justify-end max-w-7xl md:mx-auto flex">
-                <div className="md:ml-20 sm:ml-20 md:py-0"></div>
+            <div className="justify-end max-w-7xl md:mx-auto flex mt-14">
                 <div>
                     <label className="block text-gray-400 text-sm font-bold mb-2" >
                     Station
                     </label>
-                    <input onChange={handleSensor} defaultValue={sensor? sensor : ""} className="shadow appearance-none border rounded py-2 px-3 text-gray-700 text-sm leading-tight focus:outline-none focus:shadow-outline hover:border-purple-500" id="sensor" type="text" placeholder="Type name here" />
+                    <input onChange={handleSensor} defaultValue={sensor? sensor : ""} className="shadow appearance-none border rounded py-2 px-3 text-gray-700 text-sm leading-tight focus:outline-none focus:shadow-outline hover:border-purple-500" id="sensor" type="text" placeholder="_devname" />
                     <p className="block text-red-400 text-sm font-bold mb-2">{errorSensor}</p>
                 </div>
                 <div className="md:ml-5 sm:ml-5 md:py-0">
-		            <label className="block text-violet-400 text-sm font-bold mb-2" > . </label>
+		    <label className="block text-violet-400 text-sm font-bold mb-2" > . </label>
                     <button onClick={handleClick} className="appearance-none border rounded py-2 px-3 text-white bg-[#C416EC] text-sm font-bold leading-tight focus:outline-none shadow-md w-40 hover:bg-purple-600 duration-300" name="click">
                         {plot}
                     </button>
@@ -273,35 +253,33 @@ export default function Graph(props) {
                   </div>
                   :
                   <div className="">
-                      {/*
-                      <div className="m-1 grid gap-4 grid-cols-2">
-                          <AodNorthAfrica forecast={aerosolInfo} />
-                          <SensorCard sensor={sensorInfo} />
-                      </div>
-                       */}
-                      <div className="m-1 grid gap-4 grid-cols-1">
-                          <WindyForecast location={0.0}/>
-                      </div>
-                      <div className="m-1 grid gap-4 grid-cols-2">
-                          <WindyRain24 location={0.0}/>
-                          <WindyDrought location={0.0}/>
-                      </div>
-                      <br />
-                      <center><font size="6">Live Weather Station Data</font></center>
-                      <br />
-                    <div className="m-4 grid gap-4 grid-cols-3 grid-rows-2">
-                      <Temperature values={series} />
-                        <Humidity values={series} />
-                        <Pressure values={series} />
-                        <Rain values={series} />
-                        <Light values={series} />
-                        <Windspd values={series} />
+                    <div className="m-1 grid gap-4 grid-cols-1">
+                      <SensorCard sensor={sensorInfo} />
                     </div>
-                      {/*
+                    <div className="m-4 grid gap-4 grid-cols-1">
+                      <Temperature values={series} />
+                    </div>
+                    <div className="m-4 grid gap-4 grid-cols-1">
+                      <Humidity values={series} />
+                    </div>
+                    <div className="m-4 grid gap-4 grid-cols-1">
+                        <Pressure values={series} />
+                    </div>
+                    <div className={hidden_volt_str + " m-1 grid gap-4 grid-cols-1"}>
+                      <Voltage values={series} />
+                    </div>
+                    <div className={hidden_rain_str + " m-1 grid gap-4 grid-cols-1"}>
+                      <Rain values={series} />
+                    </div>
+                    <div className={hidden_solar_str + " m-1 grid gap-4 grid-cols-1"}>
+                      <Light values={series} />
+                    </div>
+                    <div className={hidden_wind_str + " m-1 grid gap-4 grid-cols-1"}>
+                      <Windspd values={series} />
+                    </div>
                     <div className={hidden_wind_str + " m-1 grid gap-4 grid-cols-1"}>
                       <Winddir values={series} />
                     </div>
-                       */}
                   </div>
               }
             </div>
@@ -319,7 +297,7 @@ export async function getServerSideProps(context) {
   let requested_sensor = context.query.devname;
   
   if ( !requested_sensor ) {
-      requested_sensor = 'bigoceanfish'
+      requested_sensor = 'brownlotguru'
   }
   
   const ctx = {
