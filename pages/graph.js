@@ -72,7 +72,7 @@ export default function Graph(props) {
     let requested_sensor = devname;
   
     if ( !requested_sensor ) {
-      requested_sensor = 'bigoceanfish'
+      requested_sensor = 'brownlotguru'
     }
 
     let minerValue = ""
@@ -319,7 +319,7 @@ export async function getServerSideProps(context) {
   let requested_sensor = context.query.devname;
   
   if ( !requested_sensor ) {
-      requested_sensor = 'bigoceanfish'
+      requested_sensor = 'brownlotguru'
   }
   
   const ctx = {
